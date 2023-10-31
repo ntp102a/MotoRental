@@ -47,24 +47,24 @@
                                 <td>
                                     @if (@item.Status.Value == 1)
                                     {
-                                            <div class="d-flex align-items-center">
-                                                <div class="badge badge-success badge-dot m-r-10"></div>
-                                                <div>Đang thuê</div>
-                                                    </div>
+                                        <div class="d-flex align-items-center">
+                                            <div class="badge badge-success badge-dot m-r-10"></div>
+                                            <div>Đang thuê</div>
+                                        </div>
                                     }
                                     @if (@item.Status.Value == 0)
                                     {
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="badge badge-success badge-dot m-r-10"></div>
-                                                        <div>Trống</div>
-                                                    </div>
+                                        <div class="d-flex align-items-center">
+                                            <div class="badge badge-success badge-dot m-r-10"></div>
+                                            <div>Trống</div>
+                                        </div>
                                     }
-                                        </td>
+                                </td>
                                 <td>
                                     <a class="btn btn-primary btn-tone m-r-5" asp-area="Admin" asp-controller="AdminRentals" asp-action="Details" asp-route-id="@item.RentalId">View</a>
                                     <a class="btn btn-secondary btn-tone m-r-5" asp-area="Admin" asp-controller="AdminRentals" asp-action="Edit" asp-route-id="@item.RentalId">Edit</a>
                                     <a class="btn btn-success btn-tone m-r-5" asp-area="Admin" asp-controller="AdminRentals" asp-action="Delete" asp-route-id="@item.RentalId">Delete</a>
-                                   
+
                                 </td>
                             </tr>
                         }
