@@ -30,7 +30,7 @@ namespace MotoRental.Controllers
                 var IsPages = _context.Vehicles
                     .AsNoTracking().Include(v => v.Brand)
                     .Include(v => v.Displacement)
-                    .Include(v => v.User)
+                    .Include(v => v.Image)
                     .OrderByDescending(x => x.UpdationDate);
                 PagedList<Vehicle> models = new PagedList<Vehicle>(IsPages, pageNumber, pageSize);
                 ViewBag.CurrentPage = pageNumber;
@@ -51,8 +51,9 @@ namespace MotoRental.Controllers
             {
                 var product = _context.Vehicles
                     .Include(v => v.Brand)
-                .Include(v => v.Displacement)
-                .Include(v => v.User)
+                    .Include(v => v.Displacement)
+                    .Include(v => v.User)
+                    .Include(v => v.Image)
                     .FirstOrDefault(x => x.VehicleId == id);
                 if (product == null)
                 {
@@ -62,8 +63,9 @@ namespace MotoRental.Controllers
                 var lsProduct = _context.Vehicles
                     .AsNoTracking()
                     .Include(v => v.Brand)
-                .Include(v => v.Displacement)
-                .Include(v => v.User)
+                    .Include(v => v.Displacement)
+                    .Include(v => v.User)
+                    .Include(v => v.Image)
                     .Where(x => x.BrandId == product.BrandId && x.VehicleId != id && x.Status == 0)
                     .OrderByDescending(x => x.UpdationDate)
                     .Take(3)
@@ -198,14 +200,14 @@ namespace MotoRental.Controllers
             {
                 _context.Vehicles.Remove(vehicle);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool VehicleExists(int id)
         {
-          return (_context.Vehicles?.Any(e => e.VehicleId == id)).GetValueOrDefault();
+            return (_context.Vehicles?.Any(e => e.VehicleId == id)).GetValueOrDefault();
         }
     }
 }

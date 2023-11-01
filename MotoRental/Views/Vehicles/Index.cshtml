@@ -113,12 +113,12 @@
                                 {
                                     foreach (var item in Model)
                                     {
-                                        string url = $"";
+                                        string url = $"/{item.VehicleId}.html";
                                         <div class="col-lg-4 col-sm-6">
                                             <div class="product-item">
                                                 <div class="product-img img-zoom-effect">
                                                     <a href="@url">
-                                                        <img class="img-full" src="~/assets/images/product/medium-size/1-10-270x300.jpg" alt="">
+                                                        <img class="img-full" src="~/images/vehicles/@item.Image.ImageFont" alt="">
                                                     </a>
                                                     <div class="product-add-action">
                                                         <ul>
@@ -143,7 +143,7 @@
                                                 <div class="product-content">
                                                     <a class="product-name" href="@url">@item.VehicleName</a>
                                                     <div class="price-box pb-1">
-                                                        <span class="new-price">@item.PricePerDay</span>
+                                                        <span class="new-price">@item.PricePerDay.Value.ToString("#,##0") VNĐ</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -163,7 +163,7 @@
                                             <div class="product-item">
                                                 <div class="product-img img-zoom-effect">
                                                     <a href="@url">
-                                                        <img class="img-full" src="~/assets/images/product/medium-size/1-10-270x300.jpg" alt="">
+                                                        <img class="img-full" src="~/images/vehicles/@item.Image.ImageFont" alt="">
                                                     </a>
                                                     <div class="product-add-action">
                                                         <ul>
@@ -188,7 +188,7 @@
                                                 <div class="product-content align-self-center">
                                                     <a class="product-name pb-2" href="@url">@item.VehicleName</a>
                                                     <div class="price-box pb-1">
-                                                        <span class="new-price">@item.PricePerDay</span>
+                                                        <span class="new-price">@item.PricePerDay.Value.ToString("#,##0")</span>
                                                     </div>
                                                     <div class="rating-box pb-2">
                                                         <ul>

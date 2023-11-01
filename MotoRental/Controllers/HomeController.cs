@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MotoRental.Models;
+using MotoRental.ModelViews;
 using System.Diagnostics;
 
 namespace MotoRental.Controllers
@@ -17,7 +19,32 @@ namespace MotoRental.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            HomeViewVM model = new HomeViewVM();
+
+            var lsProducts = _context.Vehicles
+                .AsNoTracking()
+                .Include(x => x.Image)
+                .OrderByDescending(x => x.UpdationDate)
+                .ToList();
+
+            List<ProductHomeVM> lsProductViews = new List<ProductHomeVM>();
+            var lsBrands = _context.Brands
+                .AsNoTracking()
+                .OrderByDescending(x => x.BrandId)
+                .ToList();
+
+            foreach (var item in lsBrands)
+            {
+                ProductHomeVM productHome = new ProductHomeVM();
+                productHome.brand = item;
+                productHome.lsVehicles = lsProducts
+                    .Where(x => x.BrandId == item.BrandId)
+                    .ToList();
+                lsProductViews.Add(productHome);
+            }
+            model.Vehicles = lsProductViews;
+            ViewBag.AllProducts = lsProducts;
+            return View(model);
         }
 
         public IActionResult Privacy()

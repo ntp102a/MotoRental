@@ -15,8 +15,8 @@
                         <div class="swiper-container single-product-slider">
                             <div class="swiper-wrapper">
                                 <div class="swiper-slide">
-                                    <a href="~/assets/images/product/medium-size/1-10-270x300.jpg" class="single-img gallery-popup">
-                                        <img style="max-width: 300px; max-height: 300px;" src="~/assets/images/product/medium-size/1-10-270x300.jpg" alt="">
+                                    <a href="~/images/vehicles/@Model.Image.ImageFont" class="single-img gallery-popup">
+                                        <img style="max-width: 200px; max-height: 200px;" src="~/images/vehicles/@Model.Image.ImageFont" alt="">
                                     </a>
                                 </div>
                                 <div class="swiper-slide">
@@ -46,7 +46,7 @@
                             <div class="single-product-content">
                                 <h2 class="title">@Model.VehicleName</h2>
                                 <div class="price-box pb-1">
-                                    <span class="new-price text-danger">@Model.PricePerDay.Value.ToString("#,##0") VND</span>
+                                    <span class="new-price text-danger">@Model.PricePerDay.Value.ToString("#, ##0") VNĐ</span>
                                 </div>
                                 <div class="rating-box-wrap pb-7">
                                     <div class="rating-box">
@@ -321,7 +321,7 @@
                                             <div class="product-item">
                                                 <div class="product-img img-zoom-effect">
                                                     <a href="@url">
-                                                        <img class="img-full" src="~/assets/images/product/large-size/2-1-555x645.jpg" alt="">
+                                                        <img class="img-full" src="~/images//vehicles/@item.Image.ImageFont" alt="">
                                                     </a>
                                                     <div class="product-add-action">
                                                         <ul>

@@ -14,7 +14,6 @@ namespace MotoRental.Models
         public string? VehicleName { get; set; }
         public string? LicensePlate { get; set; }
         public string? Overview { get; set; }
-        public byte[]? Image { get; set; }
         public int? PricePerDay { get; set; }
         public int? Kilometers { get; set; }
         public int? Status { get; set; }
@@ -23,9 +22,11 @@ namespace MotoRental.Models
         public int? UserId { get; set; }
         public int? BrandId { get; set; }
         public int? DisplacementId { get; set; }
+        public int? ImageId { get; set; }
 
         public virtual Brand? Brand { get; set; }
         public virtual Displacement? Displacement { get; set; }
+        public virtual Image? Image { get; set; }
         public virtual User? User { get; set; }
         public virtual ICollection<RentalDetail> RentalDetails { get; set; }
     }

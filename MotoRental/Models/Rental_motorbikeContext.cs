@@ -18,6 +18,7 @@ namespace MotoRental.Models
 
         public virtual DbSet<Brand> Brands { get; set; } = null!;
         public virtual DbSet<Displacement> Displacements { get; set; } = null!;
+        public virtual DbSet<Image> Images { get; set; } = null!;
         public virtual DbSet<Location> Locations { get; set; } = null!;
         public virtual DbSet<Rental> Rentals { get; set; } = null!;
         public virtual DbSet<RentalDetail> RentalDetails { get; set; } = null!;
@@ -56,6 +57,35 @@ namespace MotoRental.Models
                 entity.Property(e => e.Description).HasMaxLength(50);
 
                 entity.Property(e => e.DisplacementName).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<Image>(entity =>
+            {
+                entity.ToTable("Image");
+
+                entity.Property(e => e.ImageId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("image_id");
+
+                entity.Property(e => e.ImageBackSide)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("image_backSide");
+
+                entity.Property(e => e.ImageFont)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("image_font");
+
+                entity.Property(e => e.ImageLeftSide)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("image_leftSide");
+
+                entity.Property(e => e.ImageRightSide)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("image_rightSide");
             });
 
             modelBuilder.Entity<Location>(entity =>
@@ -148,8 +178,6 @@ namespace MotoRental.Models
 
                 entity.Property(e => e.VehicleId).ValueGeneratedNever();
 
-                entity.Property(e => e.Image).HasColumnType("image");
-
                 entity.Property(e => e.LicensePlate).HasMaxLength(11);
 
                 entity.Property(e => e.Overview).HasMaxLength(500);
@@ -169,6 +197,11 @@ namespace MotoRental.Models
                     .WithMany(p => p.Vehicles)
                     .HasForeignKey(d => d.DisplacementId)
                     .HasConstraintName("FK_Vehicle_Displacement");
+
+                entity.HasOne(d => d.Image)
+                    .WithMany(p => p.Vehicles)
+                    .HasForeignKey(d => d.ImageId)
+                    .HasConstraintName("FK_Vehicle_Image");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Vehicles)

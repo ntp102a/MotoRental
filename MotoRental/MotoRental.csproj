@@ -23,7 +23,7 @@
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Models\" />
-    <Folder Include="ModelViews\" />
+    <Folder Include="wwwroot\images\vehicles\" />
   </ItemGroup>
 
   <ItemGroup>
