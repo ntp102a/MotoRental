@@ -44,24 +44,38 @@ namespace MotoRental.Controllers
         }
 
         // GET: Vehicles/Details/5
-        public async Task<IActionResult> Details(int? id)
+        [Route("{id}.html", Name = "VehicleDetails")]
+        public IActionResult Details(int id)
         {
-            if (id == null || _context.Vehicles == null)
+            try
             {
-                return NotFound();
-            }
-
-            var vehicle = await _context.Vehicles
-                .Include(v => v.Brand)
+                var product = _context.Vehicles
+                    .Include(v => v.Brand)
                 .Include(v => v.Displacement)
                 .Include(v => v.User)
-                .FirstOrDefaultAsync(m => m.VehicleId == id);
-            if (vehicle == null)
+                    .FirstOrDefault(x => x.VehicleId == id);
+                if (product == null)
+                {
+                    return RedirectToAction("Index");
+                }
+
+                var lsProduct = _context.Vehicles
+                    .AsNoTracking()
+                    .Include(v => v.Brand)
+                .Include(v => v.Displacement)
+                .Include(v => v.User)
+                    .Where(x => x.BrandId == product.BrandId && x.VehicleId != id && x.Status == 0)
+                    .OrderByDescending(x => x.UpdationDate)
+                    .Take(3)
+                    .ToList();
+                ViewBag.Sanpham = lsProduct;
+                return View(product);
+            }
+            catch
             {
-                return NotFound();
+                return RedirectToAction("Index", "Home");
             }
 
-            return View(vehicle);
         }
 
         // GET: Vehicles/Create
