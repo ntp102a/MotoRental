@@ -1,0 +1,80 @@
+﻿@model IEnumerable<MotoRental.Models.Rental>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Jobber/Views/Shared/_JobberLayout.cshtml";
+}
+
+<div class="page-header">
+
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-area="Jobber" asp-controller="JobberRentals" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+            <span class="breadcrumb-item active">Danh sách đơn hàng</span>
+        </nav>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover e-commerce-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Người thuê</th>
+                        <th>Giá</th>
+                        <th>Ngày bắt đầu</th>
+                        <th>Ngày kết thúc</th>
+                        <th>Ghi chú</th>
+                        <th>Trạng thái</th>
+                        <th>#</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                @*<tbody>
+                    @if (Model != null)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.RentalId</td>
+                                <td>@item.User.FullName</td>
+                                <td>@item.Price.Value.ToString("#,##0") VND</td>
+                                <td>@item.DateFrom</td>
+                                <td>@item.DateTo</td>
+                                <td>@item.Message</td>
+                                <td>
+                                    @if (@item.Status.Value == 1)
+                                    {
+                                        <div class="d-flex align-items-center">
+                                            <div class="badge badge-success badge-dot m-r-10"></div>
+                                            <div>Đang thuê</div>
+                                        </div>
+                                    }
+                                    @if (@item.Status.Value == 0)
+                                    {
+                                        <div class="d-flex align-items-center">
+                                            <div class="badge badge-success badge-dot m-r-10"></div>
+                                            <div>Trống</div>
+                                        </div>
+                                    }
+                                </td>
+                                <td>
+                                    <a class="btn btn-primary btn-tone m-r-5" asp-area="Admin" asp-controller="AdminRentals" asp-action="Details" asp-route-id="@item.RentalId">View</a>
+                                    <a class="btn btn-secondary btn-tone m-r-5" asp-area="Admin" asp-controller="AdminRentals" asp-action="Edit" asp-route-id="@item.RentalId">Edit</a>
+                                    <a class="btn btn-success btn-tone m-r-5" asp-area="Admin" asp-controller="AdminRentals" asp-action="Delete" asp-route-id="@item.RentalId">Delete</a>
+
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>*@
+            </table>
+           @* <div aria-label="Page navigation example">
+                <ul class="pagination">
+                    <pager class="page-container" list="@Model" asp-area="Admin" asp-controller="AdminRentals" asp-action="Index" />
+                </ul>
+            </div>*@
+        </div>
+    </div>
+</div>
