@@ -16,9 +16,10 @@ namespace MotoRental.Models
         public DateTime? DateShip { get; set; }
         public string? Message { get; set; }
         public int? Price { get; set; }
-        public int? Status { get; set; }
+        public int? StatusId { get; set; }
         public int? UserId { get; set; }
 
+        public virtual Status? Status { get; set; }
         public virtual User? User { get; set; }
         public virtual ICollection<RentalDetail> RentalDetails { get; set; }
     }

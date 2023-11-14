@@ -23,6 +23,7 @@ namespace MotoRental.Models
         public virtual DbSet<Rental> Rentals { get; set; } = null!;
         public virtual DbSet<RentalDetail> RentalDetails { get; set; } = null!;
         public virtual DbSet<Role> Roles { get; set; } = null!;
+        public virtual DbSet<Status> Statuses { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
         public virtual DbSet<Vehicle> Vehicles { get; set; } = null!;
 
@@ -113,6 +114,11 @@ namespace MotoRental.Models
 
                 entity.Property(e => e.Message).HasColumnType("ntext");
 
+                entity.HasOne(d => d.Status)
+                    .WithMany(p => p.Rentals)
+                    .HasForeignKey(d => d.StatusId)
+                    .HasConstraintName("FK_Rental_Status");
+
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Rentals)
                     .HasForeignKey(d => d.UserId)
@@ -145,6 +151,17 @@ namespace MotoRental.Models
                 entity.Property(e => e.RoleId).ValueGeneratedNever();
 
                 entity.Property(e => e.RoleName).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<Status>(entity =>
+            {
+                entity.ToTable("Status");
+
+                entity.Property(e => e.StatusId).HasColumnName("status_id");
+
+                entity.Property(e => e.StatusName)
+                    .HasMaxLength(50)
+                    .HasColumnName("status_name");
             });
 
             modelBuilder.Entity<User>(entity =>

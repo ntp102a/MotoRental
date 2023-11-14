@@ -5,8 +5,14 @@ namespace MotoRental.Models
 {
     public partial class Status
     {
-        public int Id { get; set; }
-        public string? Code { get; set; }
-        public string? Description { get; set; }
+        public Status()
+        {
+            Rentals = new HashSet<Rental>();
+        }
+
+        public int StatusId { get; set; }
+        public string? StatusName { get; set; }
+
+        public virtual ICollection<Rental> Rentals { get; set; }
     }
 }

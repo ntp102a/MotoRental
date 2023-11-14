@@ -30,6 +30,7 @@ namespace MotoRental.Areas.Admin.Controllers
             var pageSize = 20;
             var IsRentals = _context.Rentals
                 .Include(x => x.User)
+                .Include(x => x.Status)
                 .AsNoTracking()
                 .OrderByDescending(x => x.DateFrom);
             PagedList<Rental> models = new PagedList<Rental>(IsRentals, pageNumber, pageSize);
