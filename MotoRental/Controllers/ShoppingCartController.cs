@@ -1,12 +1,19 @@
-﻿using AspNetCoreHero.ToastNotification.Abstractions;
-using Microsoft.AspNetCore.Http;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using MotoRental.Models;
+using AspNetCoreHero.ToastNotification.Abstractions;
 using MotoRental.ModelViews;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MotoRental.Controllers
 {
-    public class ShoppingCartController : ControllerBase
+    public class ShoppingCartController : Controller
     {
         private readonly Rental_motorbikeContext _context;
         public INotyfService _notyfService { get; }
