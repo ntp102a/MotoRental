@@ -71,6 +71,7 @@ namespace MotoRental.Areas.Admin.Controllers
             {
                 _context.Add(brand);
                 await _context.SaveChangesAsync();
+                _notyfService.Success("Thêm mới thành công");
                 return RedirectToAction(nameof(Index));
             }
             return View(brand);
@@ -110,6 +111,7 @@ namespace MotoRental.Areas.Admin.Controllers
                 {
                     _context.Update(brand);
                     await _context.SaveChangesAsync();
+                    _notyfService.Success("Sửa thành công");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -161,6 +163,7 @@ namespace MotoRental.Areas.Admin.Controllers
             }
             
             await _context.SaveChangesAsync();
+            _notyfService.Success("Xoá thành công");
             return RedirectToAction(nameof(Index));
         }
 
