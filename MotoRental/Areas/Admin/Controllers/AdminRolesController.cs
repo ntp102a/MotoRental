@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,10 +14,12 @@ namespace MotoRental.Areas.Admin.Controllers
     public class AdminRolesController : Controller
     {
         private readonly Rental_motorbikeContext _context;
+        public INotyfService _notyfService { get; }
 
-        public AdminRolesController(Rental_motorbikeContext context)
+        public AdminRolesController(Rental_motorbikeContext context, INotyfService notyfService)
         {
             _context = context;
+            _notyfService= notyfService;
         }
 
         // GET: Admin/AdminRoles
@@ -62,6 +65,7 @@ namespace MotoRental.Areas.Admin.Controllers
             {
                 _context.Add(role);
                 await _context.SaveChangesAsync();
+                _notyfService.Success("Thêm mới thành công");
                 return RedirectToAction(nameof(Index));
             }
             return View(role);
@@ -101,6 +105,7 @@ namespace MotoRental.Areas.Admin.Controllers
                 {
                     _context.Update(role);
                     await _context.SaveChangesAsync();
+                    _notyfService.Success("Sửa thành công");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -152,6 +157,7 @@ namespace MotoRental.Areas.Admin.Controllers
             }
             
             await _context.SaveChangesAsync();
+            _notyfService.Success("Xoá thành công");
             return RedirectToAction(nameof(Index));
         }
 

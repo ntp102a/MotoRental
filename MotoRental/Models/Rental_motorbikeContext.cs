@@ -42,8 +42,6 @@ namespace MotoRental.Models
             {
                 entity.ToTable("Brand");
 
-                entity.Property(e => e.BrandId).ValueGeneratedNever();
-
                 entity.Property(e => e.BrandName).HasMaxLength(50);
 
                 entity.Property(e => e.Description).HasMaxLength(50);
@@ -52,8 +50,6 @@ namespace MotoRental.Models
             modelBuilder.Entity<Displacement>(entity =>
             {
                 entity.ToTable("Displacement");
-
-                entity.Property(e => e.DisplacementId).ValueGeneratedNever();
 
                 entity.Property(e => e.Description).HasMaxLength(50);
 
@@ -64,9 +60,7 @@ namespace MotoRental.Models
             {
                 entity.ToTable("Image");
 
-                entity.Property(e => e.ImageId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("image_id");
+                entity.Property(e => e.ImageId).HasColumnName("image_id");
 
                 entity.Property(e => e.ImageBackSide)
                     .HasMaxLength(50)
@@ -93,8 +87,6 @@ namespace MotoRental.Models
             {
                 entity.ToTable("Location");
 
-                entity.Property(e => e.LocationId).ValueGeneratedNever();
-
                 entity.Property(e => e.Description).HasMaxLength(50);
 
                 entity.Property(e => e.LocationName).HasMaxLength(50);
@@ -103,8 +95,6 @@ namespace MotoRental.Models
             modelBuilder.Entity<Rental>(entity =>
             {
                 entity.ToTable("Rental");
-
-                entity.Property(e => e.RentalId).ValueGeneratedNever();
 
                 entity.Property(e => e.DateFrom).HasColumnType("datetime");
 
@@ -129,8 +119,6 @@ namespace MotoRental.Models
             {
                 entity.ToTable("RentalDetail");
 
-                entity.Property(e => e.RentalDetailId).ValueGeneratedNever();
-
                 entity.Property(e => e.CreateDate).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Rental)
@@ -147,8 +135,6 @@ namespace MotoRental.Models
             modelBuilder.Entity<Role>(entity =>
             {
                 entity.ToTable("Role");
-
-                entity.Property(e => e.RoleId).ValueGeneratedNever();
 
                 entity.Property(e => e.RoleName).HasMaxLength(50);
             });
@@ -168,8 +154,6 @@ namespace MotoRental.Models
             {
                 entity.ToTable("User");
 
-                entity.Property(e => e.UserId).ValueGeneratedNever();
-
                 entity.Property(e => e.Address).HasMaxLength(50);
 
                 entity.Property(e => e.Email).HasMaxLength(50);
@@ -177,6 +161,10 @@ namespace MotoRental.Models
                 entity.Property(e => e.FullName).HasMaxLength(50);
 
                 entity.Property(e => e.Password).HasMaxLength(50);
+
+                entity.Property(e => e.Salt)
+                    .HasMaxLength(10)
+                    .IsFixedLength();
 
                 entity.HasOne(d => d.Location)
                     .WithMany(p => p.Users)
@@ -192,8 +180,6 @@ namespace MotoRental.Models
             modelBuilder.Entity<Vehicle>(entity =>
             {
                 entity.ToTable("Vehicle");
-
-                entity.Property(e => e.VehicleId).ValueGeneratedNever();
 
                 entity.Property(e => e.LicensePlate).HasMaxLength(11);
 
