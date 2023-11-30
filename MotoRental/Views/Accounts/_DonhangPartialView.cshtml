@@ -1,0 +1,36 @@
+﻿@model List<Rental>
+@if  (Model != null && Model.Count() > 0)
+{
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <tbody>
+                <tr>
+                    <th>ID</th>
+                    <th>Ngày thuê xe</th>
+                    <th>Ngày thuê</th>
+                    <th>Trạng thái</th>
+                    <th>Tổng tiền</th>
+                    <th></th>
+                </tr>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                    <td><a class="account-order-id" href="javascript:void(0)">#@item.RentalId</a></td>
+                    <td>@item.DateFrom</td>
+                    <td>@item.DateShip</td>
+                    <td>@item.Status</td>
+                    <td>@item.Price</td>
+                    <td>
+                        <a href="javascript:void(0)" class="btn btn-secondary btn-primary-hover"><span>Xem đơn hàng</span></a>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <p>Chưa có đơn hàng!</p>
+}
+
