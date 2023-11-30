@@ -60,9 +60,17 @@
                                         <i class="pe-7s-users"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="settingButton">
-                                        <li><a class="dropdown-item" href="/tai-khoan-cua-toi.html">Tài khoản của tôi</a></li>
-                                        <li><a class="dropdown-item" href="/dang-nhap.html">Đăng nhập</a></li>
-                                        <li><a class="dropdown-item" href="/dang-ky.html">Đăng ký</a></li>
+                                        @if (User.Identity.IsAuthenticated)
+                                        {
+                                            <li><a class="dropdown-item" href="/tai-khoan-cua-toi.html">Tài khoản của tôi</a></li>
+                                        }
+                                        else
+                                        {
+                                            <li><a class="dropdown-item" href="/dang-nhap.html">Đăng nhập</a></li>
+                                            <li><a class="dropdown-item" href="/dang-ky.html">Đăng ký</a></li>
+
+                                        }
+                                        
                                     </ul>
                                 </li>
                                 <li class="d-none d-md-block">
