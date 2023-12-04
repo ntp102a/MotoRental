@@ -13,10 +13,9 @@
                         </a>
                         <div class="product-add-action">
                             <ul>
-                                <li>
-                                    <a href="cart.html">
-                                        <i class="pe-7s-cart"></i>
-                                    </a>
+                                <li class="add-to-cart">
+                                    <a><i class="pe-7s-cart"></i></a>
+                                    <input hidden asp-for="@item.VehicleId" />
                                 </li>
                             </ul>
                         </div>

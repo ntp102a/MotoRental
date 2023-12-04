@@ -374,3 +374,41 @@
         </div>
     </div>
 </main>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $(function () {
+                $(".add-to-cart").click(function () {
+                    var vehicleid = $('#VehicleId').val();
+                    var soluong = $('#txtsoLuong').val();
+                    $.ajax({
+                        url: '/api/cart/add',
+                        type: "POST",
+                        dataType: "JSON",
+                        data: {
+                            vehicleID: vehicleid,
+                            amount: soluong
+                        },
+                        success: function (response) {
+                            if (response.result == 'Redirect') {
+                                window.location = response.url;
+                            }
+                            else {
+                                loadHeaderCart();
+                                location.reload();
+                            }
+                            console.log(response);
+                        },
+                        error: function (error) {
+                            alert("Vui lòng đăng nhập trước" + error.responseText);
+                        }
+                    });
+                });
+            });
+            function loadHeaderCart() {
+                $("#headerCart").load("/AjaxContent/HeaderCart");
+            }
+        });
+    </script>
+}

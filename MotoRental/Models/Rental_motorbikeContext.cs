@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using MotoRental.ModelViews;
 
 namespace MotoRental.Models
 {
@@ -18,6 +17,7 @@ namespace MotoRental.Models
         }
 
         public virtual DbSet<Brand> Brands { get; set; } = null!;
+        public virtual DbSet<Cart> Carts { get; set; } = null!;
         public virtual DbSet<Displacement> Displacements { get; set; } = null!;
         public virtual DbSet<Image> Images { get; set; } = null!;
         public virtual DbSet<Location> Locations { get; set; } = null!;
@@ -33,7 +33,7 @@ namespace MotoRental.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=KHAILAM\\SQLEXPRESS;Database=Rental_motorbike;Integrated Security=true;");
+                optionsBuilder.UseSqlServer("Server=.;Database=Rental_motorbike;Integrated Security=true;");
             }
         }
 
@@ -46,6 +46,21 @@ namespace MotoRental.Models
                 entity.Property(e => e.BrandName).HasMaxLength(50);
 
                 entity.Property(e => e.Description).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<Cart>(entity =>
+            {
+                entity.ToTable("Cart");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Carts)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_Cart_User");
+
+                entity.HasOne(d => d.Vehicle)
+                    .WithMany(p => p.Carts)
+                    .HasForeignKey(d => d.VehicleId)
+                    .HasConstraintName("FK_Cart_Vehicle");
             });
 
             modelBuilder.Entity<Displacement>(entity =>
@@ -217,11 +232,5 @@ namespace MotoRental.Models
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-
-        public DbSet<MotoRental.ModelViews.RegisterVM>? RegisterVM { get; set; }
-
-        public DbSet<MotoRental.ModelViews.LoginViewModel>? LoginViewModel { get; set; }
-
-        public DbSet<MotoRental.ModelViews.ChangePasswordViewModel>? ChangePasswordViewModel { get; set; }
     }
 }

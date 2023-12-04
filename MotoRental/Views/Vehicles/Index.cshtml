@@ -14,28 +14,6 @@
             <div class="row">
                 <div class="col-lg-3 order-lg-1 order-2 pt-10 pt-lg-0">
                     <div class="sidebar-area">
-                        
-                        <div class="widgets-area mb-9">
-                            <h2 class="widgets-title mb-5">Lọc</h2>
-                            <div class="widgets-item">
-                                <ul class="widgets-checkbox">
-                                    <li>
-                                        <input class="input-checkbox" type="checkbox" id="refine-item-2" checked>
-                                        <label class="label-checkbox mb-0" for="refine-item-2">
-                                            Mới
-                                            <span>4</span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <input class="input-checkbox" type="checkbox" id="refine-item-3">
-                                        <label class="label-checkbox mb-0" for="refine-item-3">
-                                            Có sẵn
-                                            <span>4</span>
-                                        </label>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
                         <div class="widgets-area mb-9">
                             <h2 class="widgets-title mb-5">Hãng</h2>
                             <div class="widgets-item">
@@ -73,8 +51,8 @@
                         </div>
                     </div>
                 </div>
-                
-                <div class="col-lg-9 order-lg-2 order-1">    
+
+                <div class="col-lg-9 order-lg-2 order-1">
                     <div class="product-topbar">
                         <ul>
                             <li class="product-view-wrap">
@@ -90,9 +68,6 @@
                                         </a>
                                     </li>
                                 </ul>
-                            </li>
-                            <li class="page-count">
-                                <span>23</span> Product Found of <span>50</span>
                             </li>
                             <li class="short">
                                 <select class="nice-select wide rounded-0">
@@ -122,20 +97,9 @@
                                                     </a>
                                                     <div class="product-add-action">
                                                         <ul>
-                                                            <li>
-                                                                <a href="cart.html">
-                                                                    <i class="pe-7s-cart"></i>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="compare.html">
-                                                                    <i class="pe-7s-shuffle"></i>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="wishlist.html">
-                                                                    <i class="pe-7s-like"></i>
-                                                                </a>
+                                                            <li class="add-to-cart">
+                                                                <a><i class="pe-7s-cart"></i></a>
+                                                                <input hidden asp-for="@item.VehicleId" />
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -167,20 +131,9 @@
                                                     </a>
                                                     <div class="product-add-action">
                                                         <ul>
-                                                            <li>
-                                                                <a href="cart.html">
-                                                                    <i class="pe-7s-cart"></i>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="compare.html">
-                                                                    <i class="pe-7s-shuffle"></i>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="wishlist.html">
-                                                                    <i class="pe-7s-like"></i>
-                                                                </a>
+                                                            <li class="add-to-cart">
+                                                                <a><i class="pe-7s-cart"></i></a>
+                                                                <input hidden asp-for="@item.VehicleId" />
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -218,3 +171,40 @@
     </div>
 </main>
 <!-- Main Content Area End Here -->
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $(function () {
+                $(".add-to-cart").click(function () {
+                    var vehicleid = $(this).find("input").val();
+                    $.ajax({
+                        url: '/api/cart/add',
+                        type: "POST",
+                        dataType: "JSON",
+                        data: {
+                            vehicleID: vehicleid
+                        },
+                        success: function (response) {
+                            if (response.result == 'Redirect') {
+                                window.location = response.url;
+                            }
+                            else {
+                                loadHeaderCart();
+                                location.reload();
+                            }
+                            console.log(response);
+                        },
+                        error: function (error) {
+                            alert("Vui lòng đăng nhập trước" + error.responseText);
+                        }
+                    });
+                });
+            });
+
+            function loadHeaderCart() {
+                $("#headerCart").load("/AjaxContent/HeaderCart");
+            }
+        });
+    </script>
+
+}

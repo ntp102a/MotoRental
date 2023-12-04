@@ -11,7 +11,7 @@ namespace MotoRental.Extension
     {
         public static string GetAccountID(this IIdentity identity)
         {
-            var claim = ((ClaimsIdentity)identity).FindFirst("AccountId");
+            var claim = ((ClaimsIdentity)identity).FindFirst("UserId");
             return (claim != null) ? claim.Value : string.Empty;
         }
 
