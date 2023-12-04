@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using MotoRental.Extension;
 using MotoRental.Models;
 
-namespace LaptopShop.Controllers
+namespace MotoRental.Controllers
 {
     public class ShoppingCartController : Controller
     {
