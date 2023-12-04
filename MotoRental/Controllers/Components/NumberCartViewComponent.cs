@@ -1,16 +1,42 @@
-﻿//using MotoRental.Extension;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using MotoRental.Extension;
+using MotoRental.Models;
 using MotoRental.ModelViews;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
-namespace MotoRental.Controllers.Components
+namespace LaptopShop.Controllers.Components
 {
     public class NumberCartViewComponent : ViewComponent
     {
+        private readonly Rental_motorbikeContext _context;
+
+        public NumberCartViewComponent(Rental_motorbikeContext context)
+        {
+            _context = context;
+        }
+
         public IViewComponentResult Invoke()
         {
-            var cart = HttpContext.Session.Get<List<CartItem>>("GioHang");
-            return View(cart);
+            var accountID = User.Identity.GetAccountID();
+
+            if (int.TryParse(accountID, out var userId))
+            {
+                var cartItems = _context.Carts
+                    .Include(c => c.Vehicle)
+                    .Where(c => c.UserId == userId)
+                    .Select(c => new Cart
+                    {
+                        Vehicle = c.Vehicle,
+                        Quantity = (int)c.Quantity
+                    })
+                    .ToList();
+
+                return View(cartItems);
+            }
+            else
+            {
+                return View(new List<Cart>());
+            }
         }
     }
 }

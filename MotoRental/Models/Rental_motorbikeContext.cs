@@ -17,6 +17,7 @@ namespace MotoRental.Models
         }
 
         public virtual DbSet<Brand> Brands { get; set; } = null!;
+        public virtual DbSet<Cart> Carts { get; set; } = null!;
         public virtual DbSet<Displacement> Displacements { get; set; } = null!;
         public virtual DbSet<Image> Images { get; set; } = null!;
         public virtual DbSet<Location> Locations { get; set; } = null!;
@@ -45,6 +46,21 @@ namespace MotoRental.Models
                 entity.Property(e => e.BrandName).HasMaxLength(50);
 
                 entity.Property(e => e.Description).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<Cart>(entity =>
+            {
+                entity.ToTable("Cart");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Carts)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_Cart_User");
+
+                entity.HasOne(d => d.Vehicle)
+                    .WithMany(p => p.Carts)
+                    .HasForeignKey(d => d.VehicleId)
+                    .HasConstraintName("FK_Cart_Vehicle");
             });
 
             modelBuilder.Entity<Displacement>(entity =>

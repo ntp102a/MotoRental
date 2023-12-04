@@ -7,6 +7,7 @@ namespace MotoRental.Models
     {
         public User()
         {
+            Carts = new HashSet<Cart>();
             Rentals = new HashSet<Rental>();
             Vehicles = new HashSet<Vehicle>();
         }
@@ -23,6 +24,7 @@ namespace MotoRental.Models
 
         public virtual Location? Location { get; set; }
         public virtual Role? Role { get; set; }
+        public virtual ICollection<Cart> Carts { get; set; }
         public virtual ICollection<Rental> Rentals { get; set; }
         public virtual ICollection<Vehicle> Vehicles { get; set; }
     }

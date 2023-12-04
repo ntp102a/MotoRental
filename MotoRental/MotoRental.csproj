@@ -47,6 +47,8 @@
     <None Include="Areas\Admin\Views\Shared\_ValidationScriptsPartial.cshtml" />
     <None Include="Areas\Jobber\Views\Shared\Error.cshtml" />
     <None Include="Areas\Jobber\Views\Shared\_ValidationScriptsPartial.cshtml" />
+    <None Include="Views\Shared\Components\HeaderCart\Default.cshtml" />
+    <None Include="Views\Shared\Components\NumberCart\Default.cshtml" />
     <None Include="wwwroot\js\site.js" />
     <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map" />
     <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map" />

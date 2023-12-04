@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using MotoRental.Extension;
 using MotoRental.Models;
-using AspNetCoreHero.ToastNotification.Abstractions;
 using MotoRental.ModelViews;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Authorization;
 
 namespace MotoRental.Controllers
 {
@@ -23,108 +20,129 @@ namespace MotoRental.Controllers
             _notyfService = notyfService;
         }
 
-        public List<CartItem> GioHang
-        {
-            get
-            {
-                var gh = HttpContext.Session.Get<List<CartItem>>("GioHang");
-                if (gh == default(List<CartItem>))
-                {
-                    gh = new List<CartItem>();
-                }
-                return gh;
-            }
-        }
-        
+        [Authorize]
         [HttpPost]
         [Route("api/cart/add")]
         public IActionResult AddtoCart(int vehicleID, int? amount)
         {
-            List<CartItem> gioHang = GioHang;
             try
             {
-                CartItem item = GioHang.SingleOrDefault(x => x.vehicle.VehicleId == vehicleID);
-                if (item != null)
+                var accountID = User.Identity.GetAccountID();
+
+                if (int.TryParse(accountID, out var userId))
                 {
-                    if (amount.HasValue)
+                    var cartItem = _context.Carts
+                        .FirstOrDefault(c => c.UserId == userId && c.VehicleId == vehicleID);
+
+                    if (cartItem != null)
                     {
-                        item.amount = amount.Value;
+                        cartItem.Quantity += amount ?? 1;
                     }
                     else
                     {
-                        item.amount++;
+                        var newCartItem = new Cart
+                        {
+                            UserId = userId,
+                            VehicleId = vehicleID,
+                            Quantity = amount ?? 1
+                        };
+
+                        _context.Carts.Add(newCartItem);
                     }
+
+                    _context.SaveChanges();
+                    _notyfService.Success("Thêm vào giỏ hàng thành công");
+                    return Json(new { success = true });
                 }
                 else
                 {
-                    Vehicle xe = _context.Vehicles.SingleOrDefault(x => x.VehicleId == vehicleID);
-                    item = new CartItem
-                    {
-                        amount = amount.HasValue ? amount.Value : 1,
-                        vehicle = xe
-                    };
-                    gioHang.Add(item);
+                    return Json(new { success = false, error = "Lỗi khi xử lý giỏ hàng" });
                 }
-
-                HttpContext.Session.Set<List<CartItem>>("GioHang", gioHang);
-                _notyfService.Success("Thêm sản phẩm thành công");
-                return Json(new { success = true });
             }
-            catch
+            catch (Exception ex)
             {
-                return Json(new { success = false });
+                return Json(new { success = false, error = ex.Message });
             }
         }
 
+        [Authorize]
         [HttpPost]
         [Route("api/cart/update")]
         public IActionResult UpdateCart(int vehicleID, int? amount)
         {
-            var cart = HttpContext.Session.Get<List<CartItem>>("GioHang");
             try
             {
-                if (cart != null)
+                var accountID = User.Identity.GetAccountID();
+
+                if (int.TryParse(accountID, out var userId))
                 {
-                    CartItem item = cart.SingleOrDefault(x => x.vehicle.VehicleId == vehicleID);
-                    if (item != null && amount.HasValue)
+                    var cartItem = _context.Carts
+                        .FirstOrDefault(c => c.UserId == userId && c.VehicleId == vehicleID);
+
+                    if (cartItem != null && amount.HasValue)
                     {
-                        item.amount = amount.Value;
+                        cartItem.Quantity = amount.Value;
+                        _context.SaveChanges();
+                        return Json(new { success = true });
                     }
-                    HttpContext.Session.Set<List<CartItem>>("GioHang", cart);
                 }
-                return Json(new { success = true });
+
+                return Json(new { success = false, error = "Lỗi khi cập nhật giỏ hàng" });
             }
-            catch
+            catch (Exception ex)
             {
-                return Json(new { success = false });
+                return Json(new { success = false, error = ex.Message });
             }
         }
 
+        [Authorize]
         [HttpPost]
         [Route("api/cart/remove")]
         public IActionResult Remove(int vehicleID)
         {
             try
             {
-                List<CartItem> gioHang = GioHang;
-                CartItem item = gioHang.SingleOrDefault(x => x.vehicle.VehicleId == vehicleID);
-                if (item != null)
+                var accountID = User.Identity.GetAccountID();
+
+                if (int.TryParse(accountID, out var userId))
                 {
-                    gioHang.Remove(item);
+                    var cartItem = _context.Carts
+                        .FirstOrDefault(c => c.UserId == userId && c.VehicleId == vehicleID);
+
+                    if (cartItem != null)
+                    {
+                        _context.Carts.Remove(cartItem);
+                        _context.SaveChanges();
+                        return Json(new { success = true });
+                    }
                 }
-                HttpContext.Session.Set<List<CartItem>>("GioHang", gioHang);
-                return Json(new { success = true });
+
+                return Json(new { success = false, error = "Lỗi khi xóa sản phẩm khỏi giỏ hàng" });
             }
-             catch
+            catch (Exception ex)
             {
-                return Json(new { success = false });
+                return Json(new { success = false, error = ex.Message });
             }
         }
 
+        [Authorize]
         [Route("cart.html", Name = "Cart")]
         public IActionResult Index()
         {
-            return View();
+            var userId = int.Parse(User.Identity.GetAccountID());
+            var gioHang = _context.Carts
+                .Include(c => c.Vehicle)
+                .Include(c => c.User)
+                .Include(c => c.Vehicle.Image)
+                .Where(c => c.UserId == userId).ToList();
+            var cartItems = gioHang.Select(c => new Cart
+            {
+                Vehicle = c.Vehicle,
+                Quantity = c.Quantity,
+                User = c.User,
+            }).ToList();
+
+            return View(cartItems);
         }
     }
 }

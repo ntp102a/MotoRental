@@ -60,27 +60,28 @@
                                         <i class="pe-7s-users"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="settingButton">
-                                        <li><a class="dropdown-item" href="/tai-khoan-cua-toi.html">Tài khoản của tôi</a></li>
-                                        <li><a class="dropdown-item" href="/dang-nhap.html">Đăng nhập</a></li>
-                                        <li><a class="dropdown-item" href="/dang-ky.html">Đăng ký</a></li>
+                                        @if (User.Identity.IsAuthenticated)
+                                        {
+                                            <li><a class="dropdown-item" href="/tai-khoan-cua-toi.html">Tài khoản của tôi</a></li>
+                                        }
+                                        else
+                                        {
+                                            <li><a class="dropdown-item" href="/dang-nhap.html">Đăng nhập</a></li>
+                                            <li><a class="dropdown-item" href="/dang-ky.html">Đăng ký</a></li>
+
+                                        }
+                                        
                                     </ul>
-                                </li>
-                                <li class="d-none d-md-block">
-                                    <a href="wishlist.html">
-                                        <i class="pe-7s-like"></i>
-                                    </a>
                                 </li>
                                 <li class="d-block d-lg-none">
                                     <a href="#searchBar" class="search-btn toolbar-btn">
                                         <i class="pe-7s-search"></i>
                                     </a>
                                 </li>
-                                <li class="minicart-wrap me-3 me-lg-0">
-                                    <a href="#miniCart" class="minicart-btn toolbar-btn">
-                                        <i class="pe-7s-shopbag"></i>
-                                        <span class="quantity">1</span>
-                                    </a>
-                                </li>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    @await Component.InvokeAsync("NumberCart")
+                                }
                                 <li class="mobile-menu_wrap d-block d-lg-none">
                                     <a href="#mobileMenu" class="mobile-menu_btn toolbar-btn pl-0">
                                         <i class="pe-7s-menu"></i>
@@ -153,15 +154,17 @@
                                 <i class="pe-7s-users"></i>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="settingButtonTwo">
-                                <li><a class="dropdown-item" href="/tai-khoan-cua-toi.html">Tài khoản của tôi</a></li>
-                                <li><a class="dropdown-item" href="/dang-nhap.html">Đăng nhập</a></li>
-                                <li><a class="dropdown-item" href="/dang-ky.html">Đăng ký</a></li>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <li><a class="dropdown-item" href="/tai-khoan-cua-toi.html">Tài khoản của tôi</a></li>
+                                }
+                                else
+                                {
+                                    <li><a class="dropdown-item" href="/dang-nhap.html">Đăng nhập</a></li>
+                                    <li><a class="dropdown-item" href="/dang-ky.html">Đăng ký</a></li>
+
+                                }
                             </ul>
-                        </li>
-                        <li>
-                            <a href="wishlist.html">
-                                <i class="pe-7s-like"></i>
-                            </a>
                         </li>
                     </ul>
                 </div>
@@ -197,36 +200,10 @@
         </div>
     </div>
     <div class="offcanvas-minicart_wrapper" id="miniCart">
-        <div class="harmic-offcanvas-body">
-            <div class="minicart-content">
-                <div class="minicart-heading">
-                    <h4 class="mb-0">Giỏ hàng</h4>
-                    <a href="#" class="button-close"><i class="pe-7s-close"></i></a>
-                </div>
-                <ul class="minicart-list">
-                    <li class="minicart-product">
-                        <a class="product-item_remove" href="#">
-                            <i class="pe-7s-close"></i>
-                        </a>
-                        <a href="shop.html" class="product-item_img">
-                            <img class="img-full" src="~/images/vehicles/air-blade.png" alt="">
-                        </a>
-                        <div class="product-item_content">
-                            <a class="product-item_title" href="shop.html">Air Blade</a>
-                            <span class="product-item_quantity">1 x 120.000 VNĐ</span>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            <div class="minicart-item_total">
-                <span>Tổng tiền</span>
-                <span class="ammount">120.000 VNĐ</span>
-            </div>
-            <div class="group-btn_wrap d-grid gap-2">
-                <a href="cart.html" class="btn btn-secondary btn-primary-hover">Chỉnh sửa giỏ hàng</a>
-                <a href="checkout.html" class="btn btn-secondary btn-primary-hover">Thann toán</a>
-            </div>
-        </div>
+        @if (User.Identity.IsAuthenticated)
+        {
+            @await Component.InvokeAsync("HeaderCart")
+        }
     </div>
     <div class="global-overlay"></div>
 </header>
