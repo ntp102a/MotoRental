@@ -1,7 +1,7 @@
 ﻿@model List<Vehicle>
 @if (Model != null && Model.Count() > 0)
 {
-    <div class="product-item-wrap row">
+    <div class="product-item-wrap row pb-6 ">
         @foreach (var item in Model)
         {
             string url = $"/{item.VehicleId}.html";
