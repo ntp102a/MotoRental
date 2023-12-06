@@ -1,0 +1,40 @@
+﻿@model List<Vehicle>
+    @if (Model != null && Model.Count() > 0)
+    {
+        @foreach (var item in Model)
+        {
+            string url = $"/{item.VehicleId}.html";
+            <div class="col-12">
+                <div class="product-item">
+                    <div class="product-img img-zoom-effect">
+                        <a href="@url">
+                            <img class="img-full" src="~/images/vehicles/@item.Image.ImageFont" alt="">
+                        </a>
+                        <div class="product-add-action">
+                            <ul>
+                                <li class="add-to-cart">
+                                    <a><i class="pe-7s-cart"></i></a>
+                                    <input hidden asp-for="@item.VehicleId" />
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="product-content align-self-center">
+                        <a class="product-name pb-2" href="@url">@item.VehicleName</a>
+                        <div class="price-box pb-1">
+                            <span class="new-price">@item.PricePerDay.Value.ToString("#,##0")</span>
+                        </div>
+                        <div class="rating-box pb-2">
+                            <ul>
+                                <li><i class="pe-7s-star"></i></li>
+                                <li><i class="pe-7s-star"></i></li>
+                                <li><i class="pe-7s-star"></i></li>
+                                <li><i class="pe-7s-star"></i></li>
+                                <li><i class="pe-7s-star"></i></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
