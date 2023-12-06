@@ -1,96 +1,144 @@
-﻿<main class="main-content">
+﻿@model MotoRental.ModelViews.MuaHangVM
+@{
+    ViewData["Title"] = "Thanh toán";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<MotoRental.Models.Cart> Carts = ViewBag.GioHang;
+}
+
+<main class="main-content">
     <div class="checkout-area section-space-y-axis-100">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-6 col-12">
-                    <form action="javascript:void(0)">
+            <form asp-controller="Checkout" asp-action="Index" method="post">
+                <input hidden asp-for="UserId" />
+                <div class="row">
+                    <div class="col-lg-6 col-12">
+
                         <div class="checkbox-form">
-                            <h3>Thông tin người nhận</h3>
+                            <h3>THÔNG TIN ĐƠN HÀNG</h3>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="checkout-form-list">
-                                        <label>Họ và tên</label>
-                                        <input placeholder="" type="text">
+                                        <label>Họ và Tên</label>
+                                        <input asp-for="FullName" placeholder="Họ và Tên" type="text">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="checkout-form-list">
-                                        <label>Địa chỉ</label>
-                                        <input placeholder="" type="text">
+                                        <label>Số điện thoại <span class="required">*</span></label>
+                                        <input asp-for="Phone" placeholder="Số điện thoại" type="text">
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <div class="checkout-form-list">
-                                        <label>Email</label>
-                                        <input placeholder="" type="email">
+                                        <label>Địa chỉ nhận hàng <span class="required">*</span></label>
+                                        <input asp-for="Address" placeholder="Địa chỉ nhận hàng" type="text">
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <div class="checkout-form-list">
-                                        <label>Số điện thoại</label>
-                                        <input type="text">
+                                        <label>Ngày bắt đầu thuê<span class="required">*</span></label>
+                                        <input asp-for="DateFrom" placeholder="Ngày giờ bắt đầu thuê" type="datetime-local">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="checkout-form-list">
+                                        <label>Ngày kết thúc thuê<span class="required">*</span></label>
+                                        <input asp-for="DateTo" placeholder="Ngày giờ kết thúc thuê" type="datetime-local">
                                     </div>
                                 </div>
                             </div>
                             <div class="order-notes">
-                                <div class="checkout-form-list checkout-form-list-2">
-                                    <label>Ghi chú</label>
-                                    <textarea id="checkout-mess" cols="30" rows="10" placeholder="Ghi chú tại đây"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="col-lg-6 col-12">
-                    <div class="your-order">
-                        <h3>Hoá đơn</h3>
-                        <div class="your-order-table table-responsive">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th class="cart-product-name">Số lượng xe</th>
-                                        <th class="cart-product-total">Thành tiền</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="cart_item">
-                                        <td class="cart-product-name">
-                                            Air Blade
-                                            <strong class="product-quantity"> x1</strong>
-                                        </td>
-                                        <td class="cart-product-total"><span class="amount">120.000 VND</span></td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                    <tr class="order-total">
-                                        <th>Tổng hoá đơn</th>
-                                        <td><strong><span class="amount">120.000 VND</span></strong></td>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                        <div class="payment-method">
-                            <div class="payment-accordion">
-                                <div class="row">
-                                    <div class="card col-md-6">
-                                        <label>
-                                            <input type="radio" name="payment" value="paypal"> PayPal
-                                        </label>
-                                    </div>
-                                    <div class="card col-md-6">
-                                        <label>
-                                            <input type="radio" name="payment" value="vnpay"> VNPay
-                                        </label>
-                                    </div>                                    
-                                </div>
-                                <div class="order-button-payment">
-                                    <input value="Thanh toán" type="submit">
-                                </div>
+                                <textarea class="input" asp-for="Note" placeholder="Ghi chú"></textarea>
                             </div>
                         </div>
                     </div>
+                    <div class="col-lg-6 col-12">
+                        <div class="your-order">
+                            <h3>THÔNG TIN ĐƠN HÀNG</h3>
+                            <div class="your-order-table table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th class="cart-product-name">SẢN PHẨM</th>
+                                            <th class="cart-product-total">THÀNH TIỀN</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (Carts.Count() > 0)
+                                        {
+                                            foreach (var item in Carts)
+                                            {
+                                                <tr class="cart_item">
+                                                    <td class="cart-product-name">
+                                                        @item.Vehicle.VehicleName<strong class="product-quantity">
+                                                            × @item.Quantity
+                                                        </strong>
+                                                    </td>
+                                                    <td class="cart-product-total"><span class="amount">@item.TotalMoney.ToString("#,##0") VNĐ</span></td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="order-total">
+                                            <th>TỔNG ĐƠN HÀNG</th>
+                                            <td><strong><span class="amount">@Carts.Sum(x => x.TotalMoney).ToString("#,##0") VNĐ</span></strong></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <h5 style="color:red">Vui lòng chọn hình thức thanh toán</h5>
+                            <div class="payment-method">
+                                <div class="payment-accordion">
+                                    <div id="accordion">
+                                        <div class="card">
+                                            <div class="card-header" id="#payment-2">
+                                                <h5 class="panel-title">
+                                                    <a href="javascript:void(0)" class="collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false">
+                                                        Chuyển khoản qua ngân hàng
+                                                    </a>
+                                                </h5>
+                                            </div>
+                                            <div id="collapseTwo" class="collapse" data-bs-parent="#accordion">
+                                                <div class="card-body">
+                                                    <p>
+                                                        Thông tin tài khoản ngân hàng
+                                                    </p>
+                                                    <p>Chủ tài khoản: NGUYEN TAN PHUOC</p>
+                                                    <p>Số tài khoản: 0336960995 - Ngân hàng BIDV</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-header" id="#payment-3">
+                                                <h5 class="panel-title">
+                                                    <a href="javascript:void(0)" class="collapsed" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false">
+                                                        Thanh toán qua MOMO
+                                                    </a>
+                                                </h5>
+                                            </div>
+                                            <div id="collapseThree" class="collapse" data-bs-parent="#accordion">
+                                                <div class="card-body">
+                                                    <p>Thông tin MOMO</p>
+                                                    <p>Chủ tài khoản: Nguyễn Tấn Phước</p>
+                                                    <p>Số điện thoại: 0336960995</p>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="order-button-payment">
+                                        <input value="XÁC NHẬN ĐẶT HÀNG" type="submit">
+                                    </div>
+                                </div>
+                            </div>
+                            <a asp-action="PaypalCheckout">
+                                <img src="~/images/paypal.gif" width="300" height="100" />
+                            </a>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </main>
