@@ -78,3 +78,29 @@
 </body>
 
 </html>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        // Sử dụng sự kiện khi nút tìm kiếm được nhấn
+        $(".btn.btn-outline-whisper btn-primary-hover").click(function (event) {
+            event.preventDefault(); // Ngăn chặn việc gửi form mặc định
+
+            var strkeyword = $('#keyword').val();
+
+            // Thực hiện AJAX request
+            $.ajax({
+                url: '/SearchProduct/SearchingProductAsync',
+                type: 'GET', // Sử dụng phương thức GET
+                data: { keyword: strkeyword }, // Gửi từ khóa tìm kiếm
+                success: function (results) {
+                    window.location.href = '/SearchProduct/SearchingProductAsync?keyword=' + strkeyword;
+                },
+                error: function (xhr, status, error) {
+                    console.log(error); // Log lỗi nếu có
+                }
+            });
+        });
+    });
+</script>
