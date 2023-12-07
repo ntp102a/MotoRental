@@ -40,6 +40,15 @@ namespace MotoRental.Areas.Admin.Controllers
             ViewBag.MonthlyData = monthlyData;
             #endregion
 
+            #region Tổng doanh thu theo năm
+            var yearlyData = _context.Rentals
+                .Where(o => o.Status.StatusName == "Đã thanh toán" || o.Status.StatusName == "Đã nhận hàng")
+                .GroupBy(o => o.DateFrom.Value.Year)
+                .Select(g => new { Year = g.Key, Total = g.Sum(o => o.Price) });
+            ViewBag.YearlyData = yearlyData;
+            #endregion
+
+            ViewBag.yearlyData = yearlyData;
             ViewBag.TotalSum = totalMoney;
             ViewBag.TotalOrders = totalOrders;
             ViewBag.TotalOrdersUser = totalUser;
@@ -51,32 +60,38 @@ namespace MotoRental.Areas.Admin.Controllers
             int[] dailyDataArray = new int[DateTime.DaysInMonth(year, month)];
 
             var rentalData = _context.Rentals
-                .Where(o => o.StatusId == 2 || o.StatusId == 5)
+                .Where(o => o.Status.StatusName == "Đã thanh toán" || o.Status.StatusName == "Đã nhận hàng")
                 .Where(o => o.DateFrom.HasValue &&
                             o.DateFrom.Value.Year == year &&
                             o.DateFrom.Value.Month == month)
                 .OrderBy(o => o.DateFrom)
                 .ToList();
 
+            int totalRevenueInMonth = 0; // Tổng giá trị của tất cả các ngày
+
             // Điền giá trị từ dữ liệu thực tế vào mảng
             foreach (var rental in rentalData)
             {
-                // Lấy chỉ số của ngày trong mảng (bắt đầu từ 0)
                 int dayIndex = rental.DateFrom.Value.Day - 1;
-
-                // Gán giá trị vào mảng
                 dailyDataArray[dayIndex] += rental.Price ?? 0;
-            }
 
+                // Cập nhật tổng giá trị của tất cả các ngày
+                totalRevenueInMonth += rental.Price ?? 0;
+            }
+            //Tổng doanh thu của năm 
+            int totalRevenueInYear = _context.Rentals
+                            .Where(o => o.Status.StatusName == "Đã thanh toán" || o.Status.StatusName == "Đã nhận hàng")
+                            .Where(o => o.DateFrom.HasValue && o.DateFrom.Value.Year == year)
+                            .Sum(o => o.Price) ?? 0;
             // Tạo danh sách đối tượng để trả về
             var dailyDataList = new List<dynamic>();
             for (int i = 0; i < dailyDataArray.Length; i++)
             {
                 dailyDataList.Add(new { Date = i + 1, Total = dailyDataArray[i] });
             }
-
-            return Json(new { isEmpty = dailyDataList.Count == 0, data = dailyDataList });
+            return Json(new { isEmpty = dailyDataList.Count == 0, data = dailyDataList, totalRevenueInMonth, totalRevenueInYear }); 
         }
+
 
 
 
