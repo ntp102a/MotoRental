@@ -21,8 +21,12 @@ namespace MotoRental.Areas.Admin.Controllers
         }
         public IActionResult Index()
         {
-            var totalMoney = _context.Rentals
-                .Where(o => o.Status.StatusName == "Đã thanh toán" || o.Status.StatusName == "Đã nhận hàng")
+            var totalMoneyByYear = _context.Rentals
+                .Where(o => o.StatusId.HasValue)
+                .Sum(o => o.Price);
+
+            var totalMoneyByMonth = _context.Rentals
+                .Where(o => o.StatusId.HasValue && o.DateFrom.Value.Year == 2023 && o.DateFrom.Value.Month == 12)
                 .Sum(o => o.Price);
 
             var totalOrders = _context.Rentals.Count();
@@ -40,16 +44,9 @@ namespace MotoRental.Areas.Admin.Controllers
             ViewBag.MonthlyData = monthlyData;
             #endregion
 
-            #region Tổng doanh thu theo năm
-            var yearlyData = _context.Rentals
-                .Where(o => o.Status.StatusName == "Đã thanh toán" || o.Status.StatusName == "Đã nhận hàng")
-                .GroupBy(o => o.DateFrom.Value.Year)
-                .Select(g => new { Year = g.Key, Total = g.Sum(o => o.Price) });
-            ViewBag.YearlyData = yearlyData;
-            #endregion
 
-            ViewBag.yearlyData = yearlyData;
-            ViewBag.TotalSum = totalMoney;
+            ViewBag.TotalSum = totalMoneyByYear;
+            ViewBag.TotalMonth = totalMoneyByMonth;
             ViewBag.TotalOrders = totalOrders;
             ViewBag.TotalOrdersUser = totalUser;
             return View();
