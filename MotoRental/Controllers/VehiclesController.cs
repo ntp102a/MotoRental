@@ -43,6 +43,33 @@ namespace MotoRental.Controllers
 
         }
 
+        public IActionResult List(int id, int page = 1)
+        {
+            try
+            {
+                var pageSize = 10;
+                var danhmuc = _context.Brands
+                    .AsNoTracking()
+                    .SingleOrDefault(x => x.BrandId == id);
+                var IsPages = _context.Vehicles
+                    .Include(p => p.Image)
+                    .Include(p => p.Brand)
+                    .Include(p => p.Displacement)
+                    .Include(p => p.User)
+                    .Where(p => p.BrandId == id) // Lọc sản phẩm dựa trên CategoryId
+                    .AsNoTracking()
+                    .OrderByDescending(x => x.UpdationDate);
+                PagedList<Vehicle> models = new PagedList<Vehicle>(IsPages, page, pageSize);
+                ViewBag.CurrentPage = page;
+                ViewBag.CurrentCat = danhmuc;
+                return View(models);
+            }
+            catch
+            {
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
         // GET: Vehicles/Details/5
         [Route("{id}.html", Name = "VehicleDetails")]
         public IActionResult Details(int id)

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +12,7 @@ using MotoRental.Models;
 namespace MotoRental.Areas.Jobber.Controllers
 {
     [Area("Jobber")]
+    [Authorize(Roles = "2")]
     public class JobberVehiclesController : Controller
     {
         private readonly Rental_motorbikeContext _context;

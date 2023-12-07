@@ -1,8 +1,14 @@
-﻿@model List<Vehicle>
+﻿@using PagedList.Core.Mvc
+@model PagedList.Core.IPagedList<MotoRental.Models.Vehicle>
+
 @{
-    ViewData["Title"] = ViewBag.CurrentPage;
+    Brand brand = ViewBag.CurrentCat;
+    //ViewData["Title"] = category.CategoryName + " " + ViewBag.CurrentPage;
     Layout = "~/Views/Shared/_Layout.cshtml";
+    int PageCurrent = ViewBag.CurrentPage;
+    int NextPage = PageCurrent + 1;
 }
+
 
 <!-- Begin Main Content Area -->
 <main class="main-content">
@@ -157,6 +163,30 @@
                             </div>
                         </div>
                     </div>
+                    <div class="pagination-area pt-8 pb-1 ">
+                        <ul aria-label="Page navigation example">
+                            <pager class="page-container" options="@PagedListRenderOptions.Bootstrap4PageNumbersOnly" list="@Model" asp-area="" asp-controller="Product" asp-action="Index" />
+                        </ul>
+                    </div>
+                    <!-- store bottom filter -->
+                <div class="store-filter clearfix">
+                    <ul class="store-pagination">
+                        @for (int i = 1; i <= Model.PageCount; i++)
+                        {
+                            <li class="@(i == ViewBag.CurrentPages ? "active" : "")">
+                                @if (i != ViewBag.CurrentPages)
+                                {
+                                    <a href="@Url.RouteUrl("ShopProduct", new { page = i })">@i</a>
+                                }
+                                else
+                                {
+                                    <span>@i</span>
+                                }
+                            </li>
+                        }
+                    </ul>
+                </div>
+                <!-- /store bottom filter -->
                 </div>
             </div>
         </div>
