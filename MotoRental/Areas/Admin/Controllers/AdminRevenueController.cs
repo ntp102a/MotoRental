@@ -21,8 +21,12 @@ namespace MotoRental.Areas.Admin.Controllers
         }
         public IActionResult Index()
         {
-            var totalMoney = _context.Rentals
-                .Where(o => o.Status.StatusName == "Đã thanh toán" || o.Status.StatusName == "Đã nhận hàng")
+            var totalMoneyByYear = _context.Rentals
+                .Where(o => o.StatusId.HasValue)
+                .Sum(o => o.Price);
+
+            var totalMoneyByMonth = _context.Rentals
+                .Where(o => o.StatusId.HasValue && o.DateFrom.Value.Year == 2023 && o.DateFrom.Value.Month == 12)
                 .Sum(o => o.Price);
 
             var totalOrders = _context.Rentals.Count();
@@ -40,7 +44,8 @@ namespace MotoRental.Areas.Admin.Controllers
             ViewBag.MonthlyData = monthlyData;
             #endregion
 
-            ViewBag.TotalSum = totalMoney;
+            ViewBag.TotalSum = totalMoneyByYear;
+            ViewBag.TotalMonth = totalMoneyByMonth;
             ViewBag.TotalOrders = totalOrders;
             ViewBag.TotalOrdersUser = totalUser;
             return View();
@@ -51,7 +56,7 @@ namespace MotoRental.Areas.Admin.Controllers
             int[] dailyDataArray = new int[DateTime.DaysInMonth(year, month)];
 
             var rentalData = _context.Rentals
-                .Where(o => o.StatusId == 2 || o.StatusId == 5)
+                .Where(o => o.StatusId.HasValue)
                 .Where(o => o.DateFrom.HasValue &&
                             o.DateFrom.Value.Year == year &&
                             o.DateFrom.Value.Month == month)

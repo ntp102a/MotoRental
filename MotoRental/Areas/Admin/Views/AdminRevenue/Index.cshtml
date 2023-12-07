@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Quản Lý Doanh Thu";
     int TotalMoney = ViewBag.TotalSum;
+    int TotalMonth = ViewBag.TotalMonth;
     int TotalOrders = ViewBag.TotalOrders;
     int TotalOrdersUser = ViewBag.TotalOrdersUser;
     var monthlyData = ViewBag.MonthlyData as List<dynamic>;
@@ -32,7 +33,7 @@
                             <select id="yearSelect" class="form-control">
                                 @for (int year = DateTime.Now.Year; year >= 2000; year--)
                                 {
-                                        <option value="@year">@year</option>
+                                    <option value="@year">@year</option>
                                 }
                             </select>
                         </div>
@@ -44,7 +45,7 @@
                             <select id="monthSelect" class="form-control">
                                 @for (int month = 1; month <= 12; month++)
                                 {
-                                        <option value="@month">@month</option>
+                                    <option value="@month">@month</option>
                                 }
                             </select>
                         </div>
@@ -57,64 +58,80 @@
                         </div>
                     </div>
                 </div>
-            <div class="row">
-                <div class="col-md-4.5 col-lg-4.5">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="media align-items-center">
-                                <div class="avatar avatar-icon avatar-lg avatar-blue">
-                                    <i class="anticon anticon-dollar"></i>
+                <div class="row">
+                    <div class="col-md-4.5 col-lg-4.5">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="media align-items-center">
+                                    <div class="avatar avatar-icon avatar-lg avatar-blue">
+                                        <i class="anticon anticon-dollar"></i>
+                                    </div>
+                                    <div class="m-l-5">
+                                        <p class="m-b-0 text-muted">Tổng doanh thu trong năm</p>
+                                        <h2 class="m-b-0">@TotalMoney.ToString("#,##0") VNĐ</h2>
+                                    </div>
                                 </div>
-                                <div class="m-l-5">
-                                    <p class="m-b-0 text-muted">Tổng doanh thu trong năm</p>
-                                    <h2 class="m-b-0">@TotalMoney.ToString("#,##0") VNĐ</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="media align-items-center">
+                                    <div class="avatar avatar-icon avatar-lg avatar-gold">
+                                        <i class="anticon anticon-profile"></i>
+                                    </div>
+                                    <div class="m-l-10">
+                                        <p class="m-b-0 text-muted">Tổng đơn hàng</p>
+                                        <h2 class="m-b-0">@TotalOrders</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4"></div>
+                    <div class="col-md-4.5 col-lg-4.5">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="media align-items-center">
+                                    <div class="avatar avatar-icon avatar-lg avatar-purple">
+                                        <i class="anticon anticon-dollar"></i>
+                                    </div>
+                                    <div class="m-l-15">
+                                        <p class="m-b-0 text-muted">Doanh thu theo tháng</p>
+                                        <h2 class="m-b-0">@TotalMonth</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="media align-items-center">
+                                    <div class="avatar avatar-icon avatar-lg avatar-purple">
+                                        <i class="anticon anticon-user"></i>
+                                    </div>
+                                    <div class="m-l-15">
+                                        <p class="m-b-0 text-muted">Tổng khách hàng</p>
+                                        <h2 class="m-b-0">@TotalOrdersUser</h2>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 col-lg-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="media align-items-center">
-                                <div class="avatar avatar-icon avatar-lg avatar-gold">
-                                    <i class="anticon anticon-profile"></i>
-                                </div>
-                                <div class="m-l-10">
-                                    <p class="m-b-0 text-muted">Tổng đơn hàng</p>
-                                    <h2 class="m-b-0">@TotalOrders</h2>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 col-lg-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="media align-items-center">
-                                <div class="avatar avatar-icon avatar-lg avatar-purple">
-                                    <i class="anticon anticon-user"></i>
-                                </div>
-                                <div class="m-l-15">
-                                    <p class="m-b-0 text-muted">Tổng khách hàng</p>
-                                    <h2 class="m-b-0">@TotalOrdersUser</h2>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
                 <!--Vẽ biểu đồ-->
                 <div class="row">
                     <div class="col-md-12">
                         <canvas id="revenueChart" width="200" height="100"></canvas>
                     </div>
                 </div>
+            </div>
+            <!-- Content Wrapper END -->
         </div>
-        <!-- Content Wrapper END -->
+        <!-- Page Container END -->
     </div>
-    <!-- Page Container END -->
-</div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
@@ -254,5 +271,5 @@
         populateDateFields();
         setupExportButton();
     });
-   
+
 </script>
