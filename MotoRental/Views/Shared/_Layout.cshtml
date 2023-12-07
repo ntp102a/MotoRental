@@ -83,19 +83,75 @@
 
 <script>
     $(document).ready(function () {
+        var selectElement = $('.input-select');
+
+        var defaultOption = $('<option>', {
+            value: '0',
+            text: 'Chọn để lọc'
+        });
+
+        var selectAllOption = $('<option>', {
+            value: 'all',
+            text: 'Chọn tất cả'
+        });
+
+        selectElement.append(defaultOption);
+        selectElement.append(selectAllOption);
+
+        $.ajax({
+            url: '/Home/GetBrands',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                data.forEach(function (brandItem) {
+                    var brand = brandItem.brand;
+                    var option = $('<option>', {
+                        value: brand.BrandId,
+                        text: brand.BrandName
+                    });
+                    selectElement.append(option);
+                });
+            },
+            error: function () {
+                console.error('Không thể lấy danh sách từ máy chủ.');
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        var selectElement = $('#categorySelect'); // Sử dụng ID của thẻ select
+
+        // Lắng nghe sự kiện thay đổi của thẻ select
+        selectElement.on('change', function () {
+            var selectedCategoryId = $(this).val(); // Lấy giá trị được chọn
+
+            if (selectedCategoryId !== '0' && selectedCategoryId !== 'all') { // Kiểm tra nếu đã chọn một danh mục khác "All Categories"
+                // Chuyển hướng đến trang sản phẩm cụ thể dựa trên CategoryId
+                var url = '/Vehicles/List/' + selectedCategoryId;
+                window.location.href = url;
+            }
+            if (selectedCategoryId == 'all') {
+                var url = '/shop.html';
+                window.location.href = url;
+            }
+        });
+        selectElement.append(defaultOption);
+    });
+
+    $(document).ready(function () {
         // Sử dụng sự kiện khi nút tìm kiếm được nhấn
-        $(".btn.btn-outline-whisper btn-primary-hover").click(function (event) {
+        $(".search-btn").click(function (event) {
             event.preventDefault(); // Ngăn chặn việc gửi form mặc định
 
             var strkeyword = $('#keyword').val();
 
             // Thực hiện AJAX request
             $.ajax({
-                url: '/SearchProduct/SearchingProductAsync',
+                url: '/SearchProduct/SearchingProduct',
                 type: 'GET', // Sử dụng phương thức GET
                 data: { keyword: strkeyword }, // Gửi từ khóa tìm kiếm
                 success: function (results) {
-                    window.location.href = '/SearchProduct/SearchingProductAsync?keyword=' + strkeyword;
+                    window.location.href = '/SearchProduct/SearchingProduct?keyword=' + strkeyword;
                 },
                 error: function (xhr, status, error) {
                     console.log(error); // Log lỗi nếu có

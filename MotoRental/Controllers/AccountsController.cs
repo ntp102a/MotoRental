@@ -82,7 +82,7 @@ namespace MotoRental.Controllers
                         .Include(x => x.Status)
                         .AsNoTracking()
                         .Where(x => x.UserId == khachhang.UserId)
-                        .OrderByDescending(x => x.DateFrom).ToList();
+                        .OrderByDescending(x => x.RentalId).ToList();
                     ViewBag.Donhang = lsDonhang;
                     return View(khachhang);
                 }
