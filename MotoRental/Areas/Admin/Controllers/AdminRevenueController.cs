@@ -1,7 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MotoRental.Models;
+
+using System;
+
 using System.Data;
+
 
 namespace MotoRental.Areas.Admin.Controllers
 {
@@ -41,5 +45,40 @@ namespace MotoRental.Areas.Admin.Controllers
             ViewBag.TotalOrdersUser = totalUser;
             return View();
         }
+        public IActionResult ExportData(int year, int month)
+        {
+            // Tạo mảng để lưu trữ doanh thu của từng ngày trong tháng
+            int[] dailyDataArray = new int[DateTime.DaysInMonth(year, month)];
+
+            var rentalData = _context.Rentals
+                .Where(o => o.StatusId == 2 || o.StatusId == 5)
+                .Where(o => o.DateFrom.HasValue &&
+                            o.DateFrom.Value.Year == year &&
+                            o.DateFrom.Value.Month == month)
+                .OrderBy(o => o.DateFrom)
+                .ToList();
+
+            // Điền giá trị từ dữ liệu thực tế vào mảng
+            foreach (var rental in rentalData)
+            {
+                // Lấy chỉ số của ngày trong mảng (bắt đầu từ 0)
+                int dayIndex = rental.DateFrom.Value.Day - 1;
+
+                // Gán giá trị vào mảng
+                dailyDataArray[dayIndex] += rental.Price ?? 0;
+            }
+
+            // Tạo danh sách đối tượng để trả về
+            var dailyDataList = new List<dynamic>();
+            for (int i = 0; i < dailyDataArray.Length; i++)
+            {
+                dailyDataList.Add(new { Date = i + 1, Total = dailyDataArray[i] });
+            }
+
+            return Json(new { isEmpty = dailyDataList.Count == 0, data = dailyDataList });
+        }
+
+
+
     }
 }

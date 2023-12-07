@@ -49,6 +49,13 @@
                             </select>
                         </div>
                     </div>
+                    <div class="col-md-4">
+                        <!-- Nút xuất dữ liệu -->
+                        <div class="form-group">
+                            <label for="exportButton" style="visibility: hidden;">Label ẩn</label>
+                            <button id="exportButton" class="btn btn-primary btn-block">Thống Kê</button>
+                        </div>
+                    </div>
                 </div>
             <div class="row">
                 <div class="col-md-4.5 col-lg-4.5">
@@ -97,20 +104,119 @@
                     </div>
                 </div>
             </div>
+                <!--Vẽ biểu đồ-->
+                <div class="row">
+                    <div class="col-md-12">
+                        <canvas id="revenueChart" width="200" height="100"></canvas>
+                    </div>
+                </div>
         </div>
         <!-- Content Wrapper END -->
     </div>
     <!-- Page Container END -->
 </div>
 </div>
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script>
+    function setupExportButton() {
+        var exportButton = document.getElementById('exportButton');
+        exportButton.addEventListener('click', function () {
+            var year = document.getElementById('yearSelect').value;
+            var month = document.getElementById('monthSelect').value;
+
+            fetch(`/Admin/AdminRevenue/ExportData?year=${year}&month=${month}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('isEmpty:', data.isEmpty);
+                    if (data && data.hasOwnProperty('isEmpty') && typeof data.isEmpty === 'boolean') {
+                        if (data.isEmpty) {
+                            Swal.fire({
+                                icon: 'info',
+                                title: 'Thông Báo',
+                                text: 'Tháng này chưa có doanh thu !!!',
+                            });
+                        } else {
+                            drawChart(data);
+                        }
+                    } else {
+                        console.error('Invalid data format from server');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        });
+    }
+    function prepareChartData(data) {
+        var selectedYear = document.getElementById('yearSelect').value;
+        var selectedMonth = document.getElementById('monthSelect').value;
+
+        // Lấy ngày đầu tiên của tháng để xác định số ngày trong tháng
+        var firstDayOfMonth = moment(`${selectedMonth}/01/${selectedYear}`, 'MM/DD/YYYY');
+        var daysInMonth = firstDayOfMonth.daysInMonth();
+
+        // Khởi tạo mảng cho labels và values, sử dụng fill() để tạo mảng có giá trị mặc định
+        var labels = Array.from({ length: daysInMonth }, (_, i) => i + 1).map(day => `Ngày ${day}`);
+        var values = Array(daysInMonth).fill(0);
+
+        // Lặp qua từng ngày và cập nhật giá trị nếu có dữ liệu
+        data.data.forEach(dayData => {
+            var dayIndex = dayData.date - 1; // Ngày bắt đầu từ 1, mảng bắt đầu từ 0
+            values[dayIndex] = dayData.total;
+        });
+
+        return { labels, values };
+    }
+
+
+    function drawChart(data) {
+        console.log('Data from Controller:', data);
+        var ctx = document.getElementById('revenueChart').getContext('2d');
+
+        var { labels, values } = prepareChartData(data);
+
+        if (window.revenueChart && typeof window.revenueChart.destroy === 'function') {
+            window.revenueChart.destroy();
+        }
+
+        window.revenueChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Doanh Thu',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 0.5,
+                    data: values,
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        suggestedMin: 0,
+                        ticks: {
+                            stepSize: 10000 // Bước giảm/giữa các giá trị trục y
+                        }
+                    },
+                    x: {
+                        suggestedMin: 0,
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
     // Hàm để tạo danh sách tùy chọn cho ô chọn năm, tháng và ngày
     function populateDateFields() {
         var currentDate = new Date();
         var currentYear = currentDate.getFullYear();
         var currentMonth = currentDate.getMonth() + 1; // Tháng bắt đầu từ 0
-        var currentDay = currentDate.getDate();
+        //var currentDay = currentDate.getDate();
 
         // Ô chọn năm
         var yearSelect = document.getElementById('yearSelect');
@@ -133,18 +239,20 @@
         monthSelect.value = currentMonth; // Đặt giá trị mặc định
 
         // Ô chọn ngày
-        var daySelect = document.getElementById('daySelect');
-        for (var day = 1; day <= 31; day++) {
-            var option = document.createElement('option');
-            option.value = day;
-            option.text = day;
-            daySelect.add(option);
-        }
-        daySelect.value = currentDay; // Đặt giá trị mặc định
+        // var daySelect = document.getElementById('daySelect');
+        // for (var day = 1; day <= 31; day++) {
+        //     var option = document.createElement('option');
+        //     option.value = day;
+        //     option.text = day;
+        //     daySelect.add(option);
+        // }
+        // daySelect.value = currentDay; // Đặt giá trị mặc định
     }
 
     // Gọi hàm để tạo danh sách tùy chọn khi trang được tải
     document.addEventListener("DOMContentLoaded", function () {
         populateDateFields();
+        setupExportButton();
     });
+   
 </script>
