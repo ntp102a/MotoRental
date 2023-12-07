@@ -41,16 +41,19 @@
                             <img style="width: 133px; height: 63px;" src="~/images/logo.png" alt="Header Logo">
                         </a>
                         <div class="header-search-area d-none d-lg-block">
-                            <form action="#" class="header-searchbox">
-                                <select class="nice-select select-search-category wide">
-                                    <option value="all">Tất cả các hãng</option>
-                                    <option value="product-item">Honda</option>
-                                    <option value="product-item-2">Yamaha</option>
-                                    <option value="product-item-3">Suzuki</option>
-                                    <option value="product-item-4">SYM</option>
+                           @* <form class="header-searchbox">
+                                <select class="input-select nice-select select-search-category wide" id="brandSelect">
+                                    <!-- List categories lấy = js -->
                                 </select>
                                 <input id="keyword" name="keyword" class="input-field" type="text" placeholder="Nhập hãng xe">
                                 <button class="btn btn-outline-whisper btn-primary-hover" type="submit"><i class="pe-7s-search"></i></button>
+                            </form>*@
+                            <form>
+                                <select class="input-select" id="categorySelect">
+                                    <!-- List categories lấy = js -->
+                                </select>
+                                <input id="keyword" name="keyword" class="input" placeholder="Tìm kiếm sản phẩm">
+                                <button class="search-btn" type="submit">Search</button>
                             </form>
                         </div>
                         <div class="header-right">
@@ -191,9 +194,9 @@
                         <a href="#" class="button-close"><i class="pe-7s-close"></i></a>
                     </div>
                     <span class="searchbox-info">Tìm kiếm</span>
-                    <form action="#" class="hm-searchbox">
-                        <input type="text" placeholder="Search">
-                        <button class="search-btn" type="submit"><i class="pe-7s-search"></i></button>
+                    <form class="hm-searchbox">
+                        <input id="keyword" name="keyword" class="input-field" type="text" placeholder="Nhập hãng xe">
+                        <button class="btn btn-outline-whisper btn-primary-hover btn-search" type="submit"><i class="pe-7s-search"></i></button>
                     </form>
                 </div>
             </div>

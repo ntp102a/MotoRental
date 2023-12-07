@@ -12,20 +12,13 @@ namespace MotoRental.Controllers
         {
             _context = context;
         }
-        public async Task<IActionResult> SearchingProductAsync(string keyword)
+        public IActionResult SearchingProduct(string keyword)
         {
-            if (string.IsNullOrEmpty(keyword))
-            {
-                // Trường hợp keyword trống, có thể xử lý hoặc trả về một trang lỗi
-                return View("Error");
-            }
-            // Sử dụng ToListAsync để tránh chặn luồng trong truy vấn async
-            var lsProduct = await _context.Vehicles
+            var lsProduct = _context.Vehicles
                 .AsNoTracking()
-                .Include(p => p.VehicleId)
-                .Include(p => p.Overview)
+                .Include(p => p.Image)
                 .Where(x => x.VehicleName.Contains(keyword))
-                .ToListAsync();
+                .ToList(); // Lấy danh sách sản phẩm thay vì sử dụng ToPagedList
 
             return View(lsProduct);
         }

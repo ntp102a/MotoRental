@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MotoRental.Models;
+using System.Data;
 
 namespace MotoRental.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "1")]
     public class AdminRevenueController : Controller
     {
         private readonly Rental_motorbikeContext _context;
@@ -15,7 +18,7 @@ namespace MotoRental.Areas.Admin.Controllers
         public IActionResult Index()
         {
             var totalMoney = _context.Rentals
-                .Where(o => o.StatusId == 2 || o.StatusId == 5)
+                .Where(o => o.Status.StatusName == "Đã thanh toán" || o.Status.StatusName == "Đã nhận hàng")
                 .Sum(o => o.Price);
 
             var totalOrders = _context.Rentals.Count();
