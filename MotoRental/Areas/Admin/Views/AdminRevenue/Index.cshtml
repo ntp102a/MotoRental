@@ -2,11 +2,8 @@
 
 @{
     ViewData["Title"] = "Quản Lý Doanh Thu";
-    int TotalMoney = ViewBag.TotalSum;
-    int TotalMonth = ViewBag.TotalMonth;
     int TotalOrders = ViewBag.TotalOrders;
     int TotalOrdersUser = ViewBag.TotalOrdersUser;
-    var monthlyData = ViewBag.MonthlyData as List<dynamic>;
 }
 
 <div class="page-header">
@@ -88,26 +85,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="media align-items-center">
-                                    <div class="avatar avatar-icon avatar-lg avatar-purple">
-                                        <i class="anticon anticon-user"></i>
-                                    </div>
-                                    <div class="m-l-15">
-                                        <p class="m-b-0 text-muted">Tổng khách hàng</p>
-                                        <h2 class="m-b-0">@TotalOrdersUser</h2>
-                                        <i class="anticon anticon-dollar"></i>
-                                    </div>
-                                    <div class="m-l-15">
-                                        <p class="m-b-0 text-muted">Doanh thu theo tháng</p>
-                                        <h2 class="m-b-0">@TotalMonth</h2>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="col-md-4"></div>
                     <div class="col-md-4">
                         <div class="card">
                             <div class="card-body">
@@ -118,6 +96,21 @@
                                     <div class="m-l-5">
                                         <p class="m-b-0 text-muted">Tổng doanh thu trong tháng</p>
                                         <h2 class="m-b-0" id="totalRevenueInMonth">0 VNĐ</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="media align-items-center">
+                                    <div class="avatar avatar-icon avatar-lg avatar-purple">
+                                        <i class="anticon anticon-user"></i>
+                                    </div>
+                                    <div class="m-l-15">
+                                        <p class="m-b-0 text-muted">Tổng khách hàng</p>
+                                        <h2 class="m-b-0">@TotalOrdersUser</h2>
                                     </div>
                                 </div>
                             </div>
@@ -135,7 +128,6 @@
         </div>
         <!-- Page Container END -->
     </div>
-</div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
