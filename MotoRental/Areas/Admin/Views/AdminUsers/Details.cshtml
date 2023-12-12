@@ -5,57 +5,82 @@
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
+<style>
+    .container {
+        width: 60%;
+        margin: 0 auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th, td {
+        padding: 8px;
+        border: 1px solid #ddd;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+
+    hr {
+        margin: 20px 0;
+        border: none;
+        border-top: 1px solid #ddd;
+    }
+
+    .actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+</style>
+
 <h1>Details</h1>
 
-<div>
+<div class="container">
     <h4>User</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Password)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Password)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FullName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FullName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Address)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Address)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Phone)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Phone)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Location)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Location.LocationId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Role)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Role.RoleId)
-        </dd>
-    </dl>
+
+    <table>
+        <tr>
+            <th>Full Name</th>
+            <td>@Html.DisplayFor(model => model.FullName)</td>
+        </tr>
+
+        <tr>
+            <th>Address</th>
+            <td>@Html.DisplayFor(model => model.Address)</td>
+        </tr>
+
+        <tr>
+            <th>Email</th>
+            <td>@Html.DisplayFor(model => model.Email)</td>
+        </tr>
+
+        <tr>
+            <th>Phone</th>
+            <td>@Html.DisplayFor(model => model.Phone)</td>
+        </tr>
+
+        <tr>
+            <th>Password</th>
+            <td>@Html.DisplayFor(model => model.Password)</td>
+        </tr>
+
+        <tr>
+            <th>Role ID</th>
+            <td>@Html.DisplayFor(model => model.Role.RoleId)</td>
+        </tr>
+    </table>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.UserId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+<div class="actions">
+    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.UserId">Edit</a>
+    <a class="btn btn-secondary" asp-action="Index">Back to List</a>
 </div>

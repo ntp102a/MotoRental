@@ -33,7 +33,7 @@ namespace MotoRental.Areas.Admin.Controllers
             var pageSize = 20;
             var IsCustomers = _context.Users
                 .AsNoTracking()
-                .Include(x => x.Location)
+                //.Include(x => x.Location)
                 .Include(u => u.Role)
                 .OrderByDescending(x => x.UserId);
             PagedList<User> models = new PagedList<User>(IsCustomers, pageNumber, pageSize);
@@ -176,14 +176,14 @@ namespace MotoRental.Areas.Admin.Controllers
             {
                 _context.Users.Remove(user);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool UserExists(int id)
         {
-          return (_context.Users?.Any(e => e.UserId == id)).GetValueOrDefault();
+            return (_context.Users?.Any(e => e.UserId == id)).GetValueOrDefault();
         }
     }
 }
