@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using AspNetCoreHero.ToastNotification.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +14,7 @@ using PagedList.Core;
 namespace MotoRental.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "1")]
     public class AdminRentalsController : Controller
     {
         private readonly Rental_motorbikeContext _context;
@@ -48,6 +51,7 @@ namespace MotoRental.Areas.Admin.Controllers
 
             var rental = await _context.Rentals
                 .Include(r => r.User)
+                .Include(r => r.Status)
                 .FirstOrDefaultAsync(m => m.RentalId == id);
             if (rental == null)
             {
@@ -57,10 +61,79 @@ namespace MotoRental.Areas.Admin.Controllers
             return View(rental);
         }
 
+        public async Task<IActionResult> ChangeStatus(int? id)
+        {
+            if (id == null || _context.Rentals == null)
+            {
+                return NotFound();
+            }
+
+            var rental = await _context.Rentals
+            .Include(x => x.User)
+            .Include(x => x.Status)
+            .FirstOrDefaultAsync(x => x.RentalId == id);
+            if (rental == null)
+            {
+                return NotFound();
+            }
+            ViewData["TrangThai"] = new SelectList(_context.Statuses, "StatusId", "StatusName", rental.StatusId);
+            return PartialView("ChangeStatus", rental);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeStatus(int id, [Bind("RentalId,DateFrom,DateTo,DateShip,Message,Price,StatusId,UserId")] Rental rental)
+        {
+            if (id != rental.RentalId)
+            {
+                return NotFound();
+            }
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var donhang = await _context.Rentals
+                    .AsNoTracking()
+                    .Include(x => x.User)
+                    .Include(x => x.Status)
+                    .FirstOrDefaultAsync(x => x.RentalId == id);
+                    if (donhang != null)
+                    {
+                        rental.RentalId = donhang.RentalId;
+                        rental.DateFrom = donhang.DateFrom;
+                        rental.DateTo = donhang.DateTo;
+                        rental.DateShip = donhang.DateShip;
+                        rental.Message = donhang.Message;
+                        rental.Price = donhang.Price;
+                        rental.UserId = donhang.UserId;
+                    }
+                    _context.Update(rental);
+                    await _context.SaveChangesAsync();
+                    _notyfService.Success("Cập nhật thành công");
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!RentalExists(rental.RentalId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "FullName", rental.UserId);
+            ViewData["TrangThai"] = new SelectList(_context.Statuses, "StatusId", "StatusName", rental.StatusId);
+            return PartialView("ChangStatus", rental);
+        }
+
         // GET: Admin/AdminRentals/Create
         public IActionResult Create()
         {
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId");
+            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "FullName");
+            ViewData["TrangThai"] = new SelectList(_context.Statuses, "StatusId", "StatusName");
+            ViewData["VehicleId"] = new SelectList(_context.Vehicles, "VehicleId", "VehicleName");
             return View();
         }
 
@@ -69,15 +142,26 @@ namespace MotoRental.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("RentalId,DateFrom,DateTo,DateShip,Message,Price,Status,UserId")] Rental rental)
+        public async Task<IActionResult> Create([Bind("RentalId,DateFrom,DateTo,DateShip,Message,Price,StatusId,UserId")] Rental rental, RentalDetail rentalDetail)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(rental);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                //_context.Add(rental);
+                //await _context.SaveChangesAsync();
+                //rentalDetail = new RentalDetail();
+                //rentalDetail.RentalDetailId = rental.RentalId;
+                //rentalDetail.VehicleId = 
+                //rentalDetail.Amount = item.amount;
+                //rentalDetail.TotalMoney = donhang.TotalMoney;
+                //rentalDetail.Price = item.product.Price;
+                //rentalDetail.CreateDate = DateTime.Now;
+                //_context.Add(rentalDetail);
+                //_notyfService.Success("Cập nhật thành công");
+                //return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", rental.UserId);
+            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "FullName", rental.UserId);
+            ViewData["TrangThai"] = new SelectList(_context.Statuses, "StatusId", "StatusName", rental.StatusId);
+            ViewData["VehicleId"] = new SelectList(_context.Vehicles, "VehicleId", "VehicleName", rentalDetail.VehicleId);
             return View(rental);
         }
 
@@ -94,7 +178,8 @@ namespace MotoRental.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", rental.UserId);
+            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "FullName", rental.UserId);
+            ViewData["TrangThai"] = new SelectList(_context.Statuses, "StatusId", "StatusName", rental.StatusId);
             return View(rental);
         }
 
@@ -103,7 +188,7 @@ namespace MotoRental.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("RentalId,DateFrom,DateTo,DateShip,Message,Price,Status,UserId")] Rental rental)
+        public async Task<IActionResult> Edit(int id, [Bind("RentalId,DateFrom,DateTo,DateShip,Message,Price,StatusId,UserId")] Rental rental)
         {
             if (id != rental.RentalId)
             {
@@ -116,6 +201,7 @@ namespace MotoRental.Areas.Admin.Controllers
                 {
                     _context.Update(rental);
                     await _context.SaveChangesAsync();
+                    _notyfService.Success("Cập nhật thành công");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -130,7 +216,8 @@ namespace MotoRental.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", rental.UserId);
+            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "FullName", rental.UserId);
+            ViewData["TrangThai"] = new SelectList(_context.Statuses, "StatusId", "StatusName", rental.StatusId);
             return View(rental);
         }
 
@@ -144,6 +231,7 @@ namespace MotoRental.Areas.Admin.Controllers
 
             var rental = await _context.Rentals
                 .Include(r => r.User)
+                .Include(r => r.Status)
                 .FirstOrDefaultAsync(m => m.RentalId == id);
             if (rental == null)
             {

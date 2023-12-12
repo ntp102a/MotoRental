@@ -7,8 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Areas\Jobber\Views\Shared\Error.cshtml" />
-    <Content Remove="Areas\Jobber\Views\Shared\_ValidationScriptsPartial.cshtml" />
+    <Compile Remove="Areas\Jobber\**" />
+    <Content Remove="Areas\Jobber\**" />
+    <EmbeddedResource Remove="Areas\Jobber\**" />
+    <None Remove="Areas\Jobber\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Areas\Jobber\Controllers\JobberHomeController.cs" />
+    <Compile Include="Areas\Jobber\Controllers\JobberRentalsController.cs" />
+    <Compile Include="Areas\Jobber\Controllers\JobberVehiclesController.cs" />
+    <Compile Include="Areas\Jobber\Controllers\SearchController.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +32,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
     <PackageReference Include="PagedList.Core.Mvc" Version="3.0.0" />
+    <PackageReference Include="PayPal" Version="2.0.0-rc2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,8 +48,26 @@
     <None Include="Areas\Admin\Views\Shared\_AdminLayout.cshtml" />
     <None Include="Areas\Admin\Views\Shared\_SideNavPartialView.cshtml" />
     <None Include="Areas\Admin\Views\Shared\_ValidationScriptsPartial.cshtml" />
+    <None Include="Areas\Jobber\Views\JobberHome\Index.cshtml" />
+    <None Include="Areas\Jobber\Views\JobberRentals\Create.cshtml" />
+    <None Include="Areas\Jobber\Views\JobberRentals\Delete.cshtml" />
+    <None Include="Areas\Jobber\Views\JobberRentals\Details.cshtml" />
+    <None Include="Areas\Jobber\Views\JobberRentals\Edit.cshtml" />
+    <None Include="Areas\Jobber\Views\JobberRentals\Index.cshtml" />
+    <None Include="Areas\Jobber\Views\JobberVehicles\Create.cshtml" />
+    <None Include="Areas\Jobber\Views\JobberVehicles\Delete.cshtml" />
+    <None Include="Areas\Jobber\Views\JobberVehicles\Details.cshtml" />
+    <None Include="Areas\Jobber\Views\JobberVehicles\Edit.cshtml" />
+    <None Include="Areas\Jobber\Views\JobberVehicles\Index.cshtml" />
+    <None Include="Areas\Jobber\Views\Search\ListVehiclesSearchPartial.cshtml" />
     <None Include="Areas\Jobber\Views\Shared\Error.cshtml" />
+    <None Include="Areas\Jobber\Views\Shared\_JobberLayout.cshtml" />
+    <None Include="Areas\Jobber\Views\Shared\_SidePartialView.cshtml" />
     <None Include="Areas\Jobber\Views\Shared\_ValidationScriptsPartial.cshtml" />
+    <None Include="Areas\Jobber\Views\_ViewImports.cshtml" />
+    <None Include="Areas\Jobber\Views\_ViewStart.cshtml" />
+    <None Include="Views\Shared\Components\HeaderCart\Default.cshtml" />
+    <None Include="Views\Shared\Components\NumberCart\Default.cshtml" />
     <None Include="wwwroot\js\site.js" />
     <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map" />
     <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map" />

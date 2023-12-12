@@ -43,6 +43,33 @@ namespace MotoRental.Controllers
 
         }
 
+        public IActionResult List(int id, int page = 1)
+        {
+            try
+            {
+                var pageSize = 10;
+                var danhmuc = _context.Brands
+                    .AsNoTracking()
+                    .SingleOrDefault(x => x.BrandId == id);
+                var IsPages = _context.Vehicles
+                    .Include(p => p.Image)
+                    .Include(p => p.Brand)
+                    .Include(p => p.Displacement)
+                    .Include(p => p.User)
+                    .Where(p => p.BrandId == id) // Lọc sản phẩm dựa trên CategoryId
+                    .AsNoTracking()
+                    .OrderByDescending(x => x.UpdationDate);
+                PagedList<Vehicle> models = new PagedList<Vehicle>(IsPages, page, pageSize);
+                ViewBag.CurrentPage = page;
+                ViewBag.CurrentCat = danhmuc;
+                return View(models);
+            }
+            catch
+            {
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
         // GET: Vehicles/Details/5
         [Route("{id}.html", Name = "VehicleDetails")]
         public IActionResult Details(int id)
@@ -78,136 +105,6 @@ namespace MotoRental.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-        }
-
-        // GET: Vehicles/Create
-        public IActionResult Create()
-        {
-            ViewData["BrandId"] = new SelectList(_context.Brands, "BrandId", "BrandId");
-            ViewData["DisplacementId"] = new SelectList(_context.Displacements, "DisplacementId", "DisplacementId");
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId");
-            return View();
-        }
-
-        // POST: Vehicles/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("VehicleId,VehicleName,LicensePlate,Overview,Image,PricePerDay,Kilometers,Status,RegDate,UpdationDate,UserId,BrandId,DisplacementId")] Vehicle vehicle)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(vehicle);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["BrandId"] = new SelectList(_context.Brands, "BrandId", "BrandId", vehicle.BrandId);
-            ViewData["DisplacementId"] = new SelectList(_context.Displacements, "DisplacementId", "DisplacementId", vehicle.DisplacementId);
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", vehicle.UserId);
-            return View(vehicle);
-        }
-
-        // GET: Vehicles/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.Vehicles == null)
-            {
-                return NotFound();
-            }
-
-            var vehicle = await _context.Vehicles.FindAsync(id);
-            if (vehicle == null)
-            {
-                return NotFound();
-            }
-            ViewData["BrandId"] = new SelectList(_context.Brands, "BrandId", "BrandId", vehicle.BrandId);
-            ViewData["DisplacementId"] = new SelectList(_context.Displacements, "DisplacementId", "DisplacementId", vehicle.DisplacementId);
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", vehicle.UserId);
-            return View(vehicle);
-        }
-
-        // POST: Vehicles/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("VehicleId,VehicleName,LicensePlate,Overview,Image,PricePerDay,Kilometers,Status,RegDate,UpdationDate,UserId,BrandId,DisplacementId")] Vehicle vehicle)
-        {
-            if (id != vehicle.VehicleId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(vehicle);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!VehicleExists(vehicle.VehicleId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["BrandId"] = new SelectList(_context.Brands, "BrandId", "BrandId", vehicle.BrandId);
-            ViewData["DisplacementId"] = new SelectList(_context.Displacements, "DisplacementId", "DisplacementId", vehicle.DisplacementId);
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", vehicle.UserId);
-            return View(vehicle);
-        }
-
-        // GET: Vehicles/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Vehicles == null)
-            {
-                return NotFound();
-            }
-
-            var vehicle = await _context.Vehicles
-                .Include(v => v.Brand)
-                .Include(v => v.Displacement)
-                .Include(v => v.User)
-                .FirstOrDefaultAsync(m => m.VehicleId == id);
-            if (vehicle == null)
-            {
-                return NotFound();
-            }
-
-            return View(vehicle);
-        }
-
-        // POST: Vehicles/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.Vehicles == null)
-            {
-                return Problem("Entity set 'Rental_motorbikeContext.Vehicles'  is null.");
-            }
-            var vehicle = await _context.Vehicles.FindAsync(id);
-            if (vehicle != null)
-            {
-                _context.Vehicles.Remove(vehicle);
-            }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool VehicleExists(int id)
-        {
-            return (_context.Vehicles?.Any(e => e.VehicleId == id)).GetValueOrDefault();
         }
     }
 }

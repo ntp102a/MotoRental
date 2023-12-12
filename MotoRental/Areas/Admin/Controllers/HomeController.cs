@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MotoRental.Areas.Admin.Controllers
 {
 	[Area("Admin")]
-	public class HomeController : Controller
+    [Authorize(Roles = "1")]
+    public class HomeController : Controller
 	{
 		public IActionResult Index()
 		{

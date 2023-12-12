@@ -1,0 +1,82 @@
+﻿@model MotoRental.Models.Rental
+@{
+    ViewData["Title"] = "ChangeStatus";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-header">
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+            <a class="breadcrumb-item" asp-area="Admin" asp-controller="AdminRentals" asp-action="Index">Danh sách đơn hàng</a>
+            <span class="breadcrumb-item active">Thay đổi trạng thái</span>
+        </nav>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">Thay Đổi Trạng Thái</h4>
+        <div class="table-responsive">
+            <table class="product-info-table m-t-20">
+                <tbody>
+                    <tr>
+                        <td>ID:</td>
+                        <td class="text-dark font-weight-semibold">@Model.UserId</td>
+                    </tr>
+                    <tr>
+                        <td>Người Thuê:</td>
+                        <td>@Model.User.FullName</td>
+                    </tr>
+                    <tr>
+                        <td>Giá:</td>
+                        <td>@Model.Price</td>
+                    </tr>
+                    <tr>
+                        <td>Ngày bắt đầu:</td>
+                        <td>@Model.DateFrom</td>
+                    </tr>
+                    <tr>
+                        <td>Ngày giao:</td>
+                        <td>@Model.DateShip</td>
+                    </tr>
+                    <tr>
+                        <td>Ngày kết thúc:</td>
+                        <td>@Model.DateTo</td>
+                    </tr>
+                    <tr>
+                        <td>Ghi chú:</td>
+                        <td>@Model.Message</td>
+                    </tr>
+                    @* <tr>
+                        <td>Trạng thái:</td>
+                        <td>@Model.Status.StatusName</td>
+                    </tr> *@
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="ChangeStatus">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="RentalId" />
+            <div class="form-group">
+                <label asp-for="Status" class="control-label"></label>
+                <select asp-for="StatusId" class="form-control" asp-items="ViewBag.TrangThai"></select>
+                <span asp-validation-for="StatusId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

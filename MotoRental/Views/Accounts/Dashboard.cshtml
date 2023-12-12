@@ -5,8 +5,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     List<Rental> DanhSachDonHang = ViewBag.Donhang;
     MotoRental.ModelViews.ChangePasswordViewModel changePassword = new MotoRental.ModelViews.ChangePasswordViewModel();
+    MotoRental.ModelViews.ChangeInfoViewModel changeInfo = new MotoRental.ModelViews.ChangeInfoViewModel();
 }
-}
+
 <main class="main-content">
     <div class="account-page-area section-space-y-axis-100">
         <div class="container">
@@ -21,6 +22,9 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="account-details-tab" data-bs-toggle="tab" href="#account-details" role="tab" aria-controls="account-details" aria-selected="false">Thay đổi mật khẩu</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="info-details-tab" data-bs-toggle="tab" href="#info-details" role="tab" aria-controls="info-details" aria-selected="false">Thay đổi thông tin</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="account-logout-tab" href="/dang-xuat.html" role="tab" aria-selected="false">Đăng xuất</a>
@@ -40,61 +44,51 @@
 
                             </div>
                         </div>
-                        
-                    </div>
-                </div>
-
-                <div class="tab-pane fade" id="account-orders" role="tabpanel" aria-labelledby="account-orders-tab">
-                    <div class="myaccount-orders">
-                        <h4 class="small-title">DANH SÁCH ĐƠN HÀNG</h4>
-                        @if (DanhSachDonHang != null && DanhSachDonHang.Count() > 0)
-                        {
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-hover">
-                                    <tbody>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Ngày thuê xe</th>
-                                            <th>Ngày thuê</th>
-                                            <th>Trạng thái</th>
-                                            <th>Tổng tiền</th>
-                                            <th></th>
-                                        </tr>
-                                        @foreach (var item in DanhSachDonHang)
-                                        {
-                                            <tr>
-                                                <td><a class="account-order-id" href="javascript:void(0)">#@item.RentalId</a></td>
-                                                <td>@item.DateFrom</td>
-                                                <td>@item.DateShip</td>
-                                                <td>@item.Status</td>
-                                                <td>@item.Price</td>
-                                                <td>
-                                                    <a class="xemdonhang btn btn-secondary btn-primary-hover" href="javascript:void(0)" data-madonhang="@item.RentalId"><span>Xem đơn hàng</span></a>
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                                <br />
-                                <br />
-                                <br />
-
-                                <div id="records_table">
+                        <div class="tab-pane fade" id="account-orders" role="tabpanel" aria-labelledby="account-orders-tab">
+                                <div class="myaccount-orders">
+                                    <h4 class="small-title">DANH SÁCH ĐƠN HÀNG</h4>
+                                    @await Html.PartialAsync("_DonhangPartialView", DanhSachDonHang)
+                                    
                                 </div>
-
                             </div>
-                        }
-                        else
-                        {
-                            <p>Chưa có đơn hàng!</p>
-                        }
+                        <div class="tab-pane fade" id="info-details" role="tabpanel" aria-labelledby="info-details-tab">
+                            @await Html.PartialAsync("_ChangeInfoPartialView", changeInfo)
+                        </div>
+                        <div class="tab-pane fade" id="account-details" role="tabpanel" aria-labelledby="account-details-tab">
+                            @await Html.PartialAsync("ChangePassword", changePassword)
+                        </div>
                     </div>
-                </div>
-
-                <div class="tab-pane fade" id="account-details" role="tabpanel" aria-labelledby="account-details-tab">
-                    @await Html.PartialAsync("ChangePassword", changePassword)
                 </div>
             </div>
         </div>
     </div>
 </main>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $(".xemdonhang").click(function () {
+                var productid = $(this).attr("data-madonhang");
+                $.ajax({
+                    url: '/DonHang/Details',
+                    type: "POST",
+                    dataType: "JSON",
+                    data: {
+                        id: madonhang
+                    },
+                    async: true,
+                    success: function (results) {
+                        if (result.success) {
+                            $("#records_table").html("");
+                            $("#records_table").html(results);
+                        }
+                    },
+                    error: function (rhs) {
+                        alert("Lỗi");
+                    }
+                });
+            });
+        });
+    </script>
+}
+

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MotoRental.Models;
@@ -7,6 +7,7 @@ using System.Data;
 namespace MarketWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "1")]
     public class SearchController : Controller
     {
         private readonly Rental_motorbikeContext _context;

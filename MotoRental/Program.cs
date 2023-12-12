@@ -20,6 +20,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         option.AccessDeniedPath = "/";
     });
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 
 builder.Services.AddNotyf(config => { config.DurationInSeconds = 3; config.IsDismissable = true; config.Position = NotyfPosition.TopRight; });
 
@@ -43,17 +44,16 @@ app.UseAuthorization();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
-      name: "areas",
+      name: "Jobber",
+      pattern: "{area:exists}/{controller=JobberHome}/{action=Index}/{id?}"
+    );
+    endpoints.MapControllerRoute(
+      name: "admin",
       pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
     );
     endpoints.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-    endpoints.MapControllerRoute(
-      name: "jobber",
-      pattern: "{area:exists}/{controller=JobberHome}/{action=Index}/{id?}"
-    );
-
 });
 
 app.Run();

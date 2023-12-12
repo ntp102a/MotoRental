@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MotoRental.Models;
 using MotoRental.ModelViews;
+using Newtonsoft.Json;
 using System.Diagnostics;
 
 namespace MotoRental.Controllers
@@ -16,6 +17,28 @@ namespace MotoRental.Controllers
             _logger = logger;
             _context = context;
         }
+        public ActionResult GetBrands()
+        {
+            List<ProductHomeVM> lsProductViews = new List<ProductHomeVM>();
+            var lsCats = _context.Brands
+                .AsNoTracking()
+                .OrderByDescending(x => x.BrandId)
+                .ToList();
+
+            foreach (var item in lsCats)
+            {
+                ProductHomeVM productHome = new ProductHomeVM();
+                productHome.brand = item;
+                lsProductViews.Add(productHome);
+            }
+
+            // Sử dụng JsonConvert để chuyển danh sách danh mục thành chuỗi JSON
+            string jsonCategories = JsonConvert.SerializeObject(lsProductViews);
+
+            // Trả về dữ liệu JSON cho yêu cầu
+            return Content(jsonCategories, "application/json");
+        }
+
 
         public IActionResult Index()
         {

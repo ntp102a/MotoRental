@@ -7,7 +7,7 @@
 }
 
 <main class="main-content">
-    <div class="single-product-area section-space-top-100">
+    <div class="single-product-area section-space-top-55">
         <div class="container">
             <div class="row">
                 <div class="col-lg-6">
@@ -16,7 +16,7 @@
                             <div class="swiper-wrapper">
                                 <div class="swiper-slide">
                                     <a href="~/images/vehicles/@Model.Image.ImageFont" class="single-img gallery-popup">
-                                        <img style="max-width: 200px; max-height: 200px;" src="~/images/vehicles/@Model.Image.ImageFont" alt="">
+                                        <img style="max-width: 100%; max-height: 100%;" src="~/images/vehicles/@Model.Image.ImageFont" alt="">
                                     </a>
                                 </div>
                                 <div class="swiper-slide">
@@ -42,7 +42,7 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="product-thumb-with-content row">
-                        <div class="col-12 order-lg-1 order-2 pt-10 pt-lg-0">
+                        <div class="col-12 order-lg-1 order-2 pt-6   pt-lg-0">
                             <div class="single-product-content">
                                 <h2 class="title">@Model.VehicleName</h2>
                                 <div class="price-box pb-1">
@@ -94,22 +94,9 @@
 
                             </div>
                         </div>
-                        <div class="col-12 order-lg-2 order-1 pt-10 pt-lg-0">
+                        <div class="col-12 order-lg-2 order-1 pt-6 pt-lg-0">
                             <div class="swiper-container single-product-thumbs">
-                                <div class="swiper-wrapper">
-                                    <a href="javascript:void(0)" class="swiper-slide">
-                                        <img class="img-full" src="~/assets/images/product/large-size/2-1-555x645.jpg" alt="Product Thumnail">
-                                    </a>
-                                    <a href="javascript:void(0)" class="swiper-slide">
-                                        <img class="img-full" src="~/assets/images/product/large-size/2-2-555x645.jpg" alt="Product Thumnail">
-                                    </a>
-                                    <a href="javascript:void(0)" class="swiper-slide">
-                                        <img class="img-full" src="~/assets/images/product/large-size/2-3-555x645.jpg" alt="Product Thumnail">
-                                    </a>
-                                    <a href="javascript:void(0)" class="swiper-slide">
-                                        <img class="img-full" src="~/assets/images/product/large-size/2-4-555x645.jpg" alt="Product Thumnail">
-                                    </a>
-                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -117,7 +104,7 @@
             </div>
         </div>
     </div>
-    <div class="product-tab-area section-space-top-100">
+    <div class="product-tab-area pt-5">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -301,7 +288,7 @@
             </div>
         </div>
     </div>
-    <div class="product-slider-area section-space-top-95 section-space-bottom-100">
+    <div class="product-slider-area section-space-top-55 section-space-bottom-55">
         <div class="container">
             <div class="section-title text-center pb-55">
                 <span class="sub-title text-primary">Có thể bạn thích</span>
@@ -309,7 +296,7 @@
             </div>
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="swiper-slider-holder swiper-arrow">
+                    <div class="swiper-slider-holder swiper-arrow pt-xl-5 pb-xl-5">
                         <div class="swiper-container product-slider border-issue">
                             <div class="swiper-wrapper">
                                 @if (lsProduct != null)
@@ -374,3 +361,41 @@
         </div>
     </div>
 </main>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $(function () {
+                $(".add-to-cart").click(function () {
+                    var vehicleid = $('#VehicleId').val();
+                    var soluong = $('#txtsoLuong').val();
+                    $.ajax({
+                        url: '/api/cart/add',
+                        type: "POST",
+                        dataType: "JSON",
+                        data: {
+                            vehicleID: vehicleid,
+                            amount: soluong
+                        },
+                        success: function (response) {
+                            if (response.result == 'Redirect') {
+                                window.location = response.url;
+                            }
+                            else {
+                                loadHeaderCart();
+                                location.reload();
+                            }
+                            console.log(response);
+                        },
+                        error: function (error) {
+                            alert("Vui lòng đăng nhập trước" + error.responseText);
+                        }
+                    });
+                });
+            });
+            function loadHeaderCart() {
+                $("#headerCart").load("/AjaxContent/HeaderCart");
+            }
+        });
+    </script>
+}
