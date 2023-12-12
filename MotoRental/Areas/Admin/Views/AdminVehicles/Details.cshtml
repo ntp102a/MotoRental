@@ -1,91 +1,113 @@
 ﻿@model MotoRental.Models.Vehicle
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Thông tin sản phẩm" + Model.VehicleName;
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>Details</h1>
+<div class="page-header">
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Trang chủ</a>
+            <a class="breadcrumb-item" asp-area="Admin" asp-controller="AdminVehicles" asp-action="Index">Danh sách xe</a>
+            <span class="breadcrumb-item active">Thông tin xe : @Model.VehicleName</span>
+        </nav>
+    </div>
+</div>
 
-<div>
-    <h4>Vehicle</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.VehicleName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.VehicleName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LicensePlate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LicensePlate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Overview)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Overview)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Image)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Image)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PricePerDay)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PricePerDay)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Kilometers)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Kilometers)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RegDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RegDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UpdationDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UpdationDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Brand)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Brand.BrandId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Displacement)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Displacement.DisplacementId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.UserId)
-        </dd>
-    </dl>
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">Thông tin sản phẩm : @Model.VehicleName</h4>
+        <div class="table-responsive">
+            <table class="product-info-table m-t-20">
+                <tbody>
+                    <tr>
+                        <td>ID:</td>
+                        <td class="text-dark font-weight-semibold">@Model.VehicleId</td>
+                    </tr>
+                    <tr>
+                        <td>Tên xe:</td>
+                        <td>@Model.VehicleName</td>
+                    </tr>
+                    <tr>
+                        <td>Hãng:</td>
+                        <td>@Model.Brand?.BrandName</td>
+                    </tr>
+                    <tr>
+                        <td>Biển số:</td>
+                        <td>@Model.LicensePlate</td>
+                    </tr>
+                    <tr>
+                        <td>Mô tả:</td>
+                        <td>@Model.Overview</td>
+                    </tr>
+                    <tr>
+                        <td>Giá:</td>
+                        <td>@Model.PricePerDay</td>
+                    </tr>
+                    <tr>
+                        <td>Số Km:</td>
+                        <td>@Model.Kilometers</td>
+                    </tr>
+                    <tr>
+                        <td>Tình trạng: </td>
+                        @if (@Model.Status.Value == 1)
+                        {
+                            <td>Đang thuê</td>
+                        }
+                        @if (Model.Status.Value == 0)
+                        {
+                            <td>Trống</td>
+                        }
+                    </tr>
+                    <tr>
+                        <td>Ngày đăng ký:</td>
+                        <td>
+                            @if (Model.RegDate.HasValue)
+                            {
+                                @Model.RegDate.Value.ToString("dd/MM/yyyy")
+                            }
+                            else
+                            {
+                                <span>Không có dữ liệu</span>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Chủ xe:</td>
+                        <td>@Model.User?.FullName</td>
+                    </tr>
+                    <tr>
+                        <td>Phân khối:</td>
+                        <td>@Model.Displacement?.DisplacementName</td>
+                    </tr>
+                    <tr>
+                        <td>Hình ảnh chính:</td>
+                        <td>
+                            <img width="200" height="200" src="~/images/vehicles/@Model.Image.ImageFont" alt="" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Hình ảnh nhỏ 1:</td>
+                        <td>
+                            <img width="200" height="200" src="~/images/vehicles/@Model.Image.ImageLeftSide" alt="" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Hình ảnh nhỏ 2:</td>
+                        <td>
+                            <img width="200" height="200" src="~/images/vehicles/@Model.Image.ImageBackSide" alt="" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Hình ảnh nhỏ 3:</td>
+                        <td>
+                            <img width="200" height="200" src="~/images/vehicles/@Model.Image.ImageRightSide" alt="" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.VehicleId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+

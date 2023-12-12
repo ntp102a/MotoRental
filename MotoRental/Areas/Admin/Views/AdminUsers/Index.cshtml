@@ -10,18 +10,19 @@
 <div class="page-header">
     <div class="header-sub-title">
         <nav class="breadcrumb breadcrumb-dash">
-
             <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
-
             <span class="breadcrumb-item active">Danh sách tài khoản khách hàng : page @CurrentPage</span>
         </nav>
     </div>
 </div>
 <div class="card">
     <div class="card-body">
-        <div class="col-lg-4 text-right">
-            <a class="btn btn-primary" asp-controller="AdminUsers" asp-action="Create"> <i class="anticon anticon-plus-circle m-r-5"></i> <span>New User</span></a>
-
+        <div class="row m-b-30">
+            <div class="col-lg-8">
+            </div>
+            <div class="col-lg-4 text-right">
+                <a class="btn btn-primary" asp-controller="AdminUsers" asp-action="Create"> <i class="anticon anticon-plus-circle m-r-5"></i> <span>New User</span></a>
+            </div>
         </div>
         <div class="table-responsive">
             <table class="table table-hover e-commerce-table">
@@ -29,8 +30,8 @@
                     <tr>
                         <th>ID</th>
                         <th>Họ và tên</th>
+                        <th>Vai trò</th>
                         <th>Địa chỉ</th>
-                        <th>Tỉnh/Thành</th>
                         <th>#</th>
                         <th></th>
                     </tr>
@@ -47,6 +48,7 @@
                                     <p>@item.Phone</p>
                                     <p>@item.Email</p>
                                 </td>
+                                <td>@item.Role.RoleName</td>
                                 <td>@item.Address</td>
                                 <td>
                                     <a class="btn btn-primary btn-tone m-r-5" asp-area="Admin" asp-controller="AdminUsers" asp-action="Details" asp-route-id="@item.UserId">View</a>
