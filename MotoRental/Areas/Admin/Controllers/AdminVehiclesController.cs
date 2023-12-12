@@ -295,7 +295,7 @@ namespace MotoRental.Areas.Admin.Controllers
 
         private bool VehicleExists(int id)
         {
-          return (_context.Vehicles?.Any(e => e.VehicleId == id)).GetValueOrDefault();
+            return (_context.Vehicles?.Any(e => e.VehicleId == id)).GetValueOrDefault();
         }
     }
 }

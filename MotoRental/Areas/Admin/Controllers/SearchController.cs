@@ -18,12 +18,12 @@ namespace MarketWeb.Areas.Admin.Controllers
         }
         // GET: Search/FindProduct
         [HttpPost]
-        public IActionResult FindProduct(string keyword)
+        public IActionResult FindVehicle(string keyword)
         {
             List<Vehicle> ls = new List<Vehicle>();
             if (string.IsNullOrEmpty(keyword) || keyword.Length < 1)
             {
-                return PartialView("ListProductsSearchPartial", null);
+                return PartialView("ListVehiclesSearchPartialView", null);
             }
             ls = _context.Vehicles
                 .AsNoTracking()
@@ -34,11 +34,11 @@ namespace MarketWeb.Areas.Admin.Controllers
                 .ToList();
             if (ls == null)
             {
-                return PartialView("ListProductsSearchPartial", null);
+                return PartialView("ListVehiclesSearchPartialView", null);
             }
             else
             {
-                return PartialView("ListProductsSearchPartial", ls);
+                return PartialView("ListVehiclesSearchPartialView", ls);
             }
         }
     }
