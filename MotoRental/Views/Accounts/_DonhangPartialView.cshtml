@@ -6,8 +6,8 @@
             <tbody>
                 <tr>
                     <th>ID</th>
-                    <th>Ngày thuê xe</th>
-                    <th>Ngày thuê</th>
+                    <th>Ngày bắt đầu</th>
+                    <th>Ngày kết thúc</th>
                     <th>Trạng thái</th>
                     <th>Tổng tiền</th>
                     <th></th>
@@ -17,8 +17,8 @@
                     <tr>
                     <td><a class="account-order-id" href="javascript:void(0)">#@item.RentalId</a></td>
                     <td>@item.DateFrom</td>
-                    <td>@item.DateShip</td>
-                    <td>@item.Status</td>
+                    <td>@item.DateTo</td>
+                    <td>@item.Status.StatusName</td>
                     <td>@item.Price</td>
                     <td>
                         <a href="javascript:void(0)" class="btn btn-secondary btn-primary-hover"><span>Xem đơn hàng</span></a>

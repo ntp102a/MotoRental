@@ -18,7 +18,7 @@ namespace MotoRental.Models
         public string? Salt { get; set; }
         public string? FullName { get; set; }
         public string? Address { get; set; }
-        public int? Phone { get; set; }
+        public string? Phone { get; set; }
         public int? RoleId { get; set; }
         public int? LocationId { get; set; }
 

@@ -116,7 +116,7 @@ namespace MotoRental.Controllers
                     User khachhang = new User
                     {
                         FullName = taikhoan.Fullname,
-                        Phone = int.Parse(taikhoan.Phone.Trim().ToLower()),
+                        Phone = taikhoan.Phone,
                         Email = taikhoan.Email.Trim().ToLower(),
                         Password = (taikhoan.Password + salt.Trim()).ToMD5(),
                         Salt = salt,
@@ -218,6 +218,10 @@ namespace MotoRental.Controllers
                 {
                     return RedirectToAction("Index", "Home", new { Area = "Admin" });
                 }
+                if (khachhang.RoleId == 2)
+                {
+                    return RedirectToAction("Index", "JobberHome", new { Area = "Jobber" });
+                }
                 else
                 {
                     if (Url.IsLocalUrl(returnUrl))
@@ -284,6 +288,36 @@ namespace MotoRental.Controllers
                         return RedirectToAction("Dashboard", "Accounts");
                     }
                 }
+            }
+            catch
+            {
+                _notyfService.Error("Thay đổi mật khẩu không thành công");
+                return RedirectToAction("Dashboard", "Accounts");
+            }
+        }
+        [Authorize]
+        [HttpPost]
+        public IActionResult ChangeInfo(ChangeInfoViewModel model)
+        {
+            try
+            {
+                var accountID = User.Identity.GetAccountID();
+
+                if (int.TryParse(accountID, out var userId))
+                {
+                    var user = _context.Users.SingleOrDefault(x => x.UserId == userId);
+                    if (user != null)
+                    {
+                        user.FullName = model.FullName;
+                        user.Address = model.Address;
+                        user.Phone = model.Phone;
+                        _context.Update(user);
+                        _context.SaveChanges();
+                        _notyfService.Success("Thay đổi thành công");
+                        return RedirectToAction("Dashboard", "Accounts");
+                    }
+                }
+                return RedirectToAction("Dashboard", "Accounts");
             }
             catch
             {

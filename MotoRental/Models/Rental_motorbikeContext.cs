@@ -112,13 +112,30 @@ namespace MotoRental.Models
             {
                 entity.ToTable("Rental");
 
+                entity.Property(e => e.Address)
+                    .HasMaxLength(50)
+                    .HasColumnName("address");
+
                 entity.Property(e => e.DateFrom).HasColumnType("datetime");
 
                 entity.Property(e => e.DateShip).HasColumnType("datetime");
 
                 entity.Property(e => e.DateTo).HasColumnType("datetime");
 
+                entity.Property(e => e.Email)
+                    .HasMaxLength(50)
+                    .HasColumnName("email");
+
                 entity.Property(e => e.Message).HasColumnType("ntext");
+
+                entity.Property(e => e.Phone)
+                    .HasMaxLength(10)
+                    .HasColumnName("phone")
+                    .IsFixedLength();
+
+                entity.Property(e => e.RentalName)
+                    .HasMaxLength(50)
+                    .HasColumnName("rental_name");
 
                 entity.HasOne(d => d.Status)
                     .WithMany(p => p.Rentals)
@@ -135,7 +152,9 @@ namespace MotoRental.Models
             {
                 entity.ToTable("RentalDetail");
 
-                entity.Property(e => e.CreateDate).HasColumnType("datetime");
+                entity.Property(e => e.CreateDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.HasOne(d => d.Rental)
                     .WithMany(p => p.RentalDetails)
@@ -178,8 +197,12 @@ namespace MotoRental.Models
 
                 entity.Property(e => e.Password).HasMaxLength(50);
 
-                entity.Property(e => e.Salt)
+                entity.Property(e => e.Phone)
                     .HasMaxLength(10)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Salt)
+                    .HasMaxLength(8)
                     .IsFixedLength();
 
                 entity.HasOne(d => d.Location)
