@@ -1,90 +1,116 @@
 ﻿@model MotoRental.Models.Vehicle
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Sửa thông tin xe";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>Edit</h1>
-
-<h4>Vehicle</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="VehicleId" />
-            <div class="form-group">
-                <label asp-for="VehicleName" class="control-label"></label>
-                <input asp-for="VehicleName" class="form-control" />
-                <span asp-validation-for="VehicleName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LicensePlate" class="control-label"></label>
-                <input asp-for="LicensePlate" class="form-control" />
-                <span asp-validation-for="LicensePlate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Overview" class="control-label"></label>
-                <input asp-for="Overview" class="form-control" />
-                <span asp-validation-for="Overview" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Image" class="control-label"></label>
-                <input asp-for="Image" class="form-control" />
-                <span asp-validation-for="Image" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PricePerDay" class="control-label"></label>
-                <input asp-for="PricePerDay" class="form-control" />
-                <span asp-validation-for="PricePerDay" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Kilometers" class="control-label"></label>
-                <input asp-for="Kilometers" class="form-control" />
-                <span asp-validation-for="Kilometers" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <input asp-for="Status" class="form-control" />
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RegDate" class="control-label"></label>
-                <input asp-for="RegDate" class="form-control" />
-                <span asp-validation-for="RegDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UpdationDate" class="control-label"></label>
-                <input asp-for="UpdationDate" class="form-control" />
-                <span asp-validation-for="UpdationDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
-                <span asp-validation-for="UserId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BrandId" class="control-label"></label>
-                <select asp-for="BrandId" class="form-control" asp-items="ViewBag.BrandId"></select>
-                <span asp-validation-for="BrandId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DisplacementId" class="control-label"></label>
-                <select asp-for="DisplacementId" class="form-control" asp-items="ViewBag.DisplacementId"></select>
-                <span asp-validation-for="DisplacementId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+<div class="page-header">
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Trang chủ</a>
+            <a class="breadcrumb-item" asp-area="Admin" asp-controller="AdminVehicles" asp-action="Index">Danh sách xe</a>
+            <span class="breadcrumb-item active">Sửa thông tin xe: @Model.VehicleName</span>
+        </nav>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<form asp-controller="AdminVehicles" asp-action="Edit" asp-route-id="@Model.VehicleId" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="@Model.VehicleId" />
+    <input type="hidden" asp-for="@Model.BrandId" />
+    <input type="hidden" asp-for="@Model.ImageId" />
+    <input type="hidden" asp-for="@Model.DisplacementId" />
+    <div class="page-header no-gutters has-tab">
+        <div class="d-md-flex m-b-15 align-items-center justify-content-between">
+            <div class="media align-items-center m-b-15">
+            </div>
+            <div class="m-b-15">
+                <button class="btn btn-primary">
+                    <i class="anticon anticon-save"></i>
+                    <span>Save</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="tab-content m-t-15">
+        <div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-group">
+                        <label class="font-weight-semibold" for="productName">Tên xe</label>
+                        <input type="text" class="form-control" asp-for="@Model.VehicleName">
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-semibold" for="productName">Biển số</label>
+                        <input type="text" class="form-control" asp-for="@Model.LicensePlate">
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-semibold" for="productName">Mô tả</label>
+                        <input type="text" class="form-control" asp-for="@Model.Overview">
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label class="font-weight-semibold" for="productPrice">Giá thuê</label>
+                            <input type="text" class="form-control" asp-for="@Model.PricePerDay">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="font-weight-semibold" for="productPrice">Số Km</label>
+                            <input type="text" class="form-control" asp-for="@Model.Kilometers">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label class="font-weight-semibold" for="productName">Ngày đăng ký</label>
+                            <input type="text" class="form-control" asp-for="@Model.RegDate">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="font-weight-semibold" for="productCategory">Chủ xe</label>
+                            <select class="custom-select" asp-for="@Model.UserId" style="min-width: 200px;" asp-items="ViewBag.UserId">
+                                <option value="" disabled selected>Chọn chủ xe</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label class="font-weight-semibold" for="productCategory">Hãng xe</label>
+                            <select class="custom-select" asp-for="@Model.BrandId" style="min-width: 200px;" asp-items="ViewBag.BrandId">
+                                <option value="" disabled selected>Chọn hãng xe</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="font-weight-semibold" for="productCategory">Phân khối</label>
+                            <select class="custom-select" asp-for="@Model.DisplacementId" style="min-width: 200px;" asp-items="ViewBag.DisplacementId">
+                                <option value="" disabled selected>Chọn phân khối</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-semibold" for="productBrand">Ảnh đại diện</label>
+                        <input name="fThumb" type="file" class="form-control-file" asp-for="@Model.Image.ImageFont">
+                        <span asp-validation-for="@Model.Image.ImageFont" class="text-danger"></span>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="font-weight-semibold" for="productBrand">Ảnh phụ 1</label>
+                            <input name="fimage1" type="file" class="form-control-file" asp-for="@Model.Image.ImageLeftSide">
+                            <span asp-validation-for="@Model.Image.ImageLeftSide" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-semibold" for="productBrand">Ảnh phụ 2</label>
+                            <input name="fimage2" type="file" class="form-control-file" asp-for="@Model.Image.ImageRightSide">
+                            <span asp-validation-for="@Model.Image.ImageRightSide" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-semibold" for="productBrand">Ảnh phụ 3</label>
+                            <input name="fimage3" type="file" class="form-control-file" asp-for="@Model.Image.ImageBackSide">
+                            <span asp-validation-for="@Model.Image.ImageBackSide" class="text-danger"></span>
+                        </div>
+                    </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+

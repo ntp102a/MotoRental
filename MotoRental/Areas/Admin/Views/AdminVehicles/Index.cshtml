@@ -67,7 +67,7 @@
                                         <h6 class="m-b-0 m-l-10">@item.VehicleName</h6>
                                     </div>
                                 </td>
-                                <td>@item.Brand.BrandName</td>
+                                <td>@item.Brand?.BrandName</td>
                                 <td>@item.LicensePlate</td>
                                 <td>@item.PricePerDay.Value.ToString("#, ##0") VND</td>
                                 <td>@item.Kilometers</td>
@@ -87,7 +87,7 @@
                                         </div>
                                     }
                                 </td>
-                                <td>@item.User.FullName</td>
+                                <td>@item.User?.FullName</td>
                                 <td>
                                     <a class="btn btn-primary btn-tone m-r-5" asp-area="Admin" asp-controller="AdminVehicles" asp-action="Details" asp-route-id="@item.VehicleId">View</a>
                                     <a class="btn btn-secondary btn-tone m-r-5" asp-area="Admin" asp-controller="AdminVehicles" asp-action="Edit" asp-route-id="@item.VehicleId">Edit</a>
