@@ -17,6 +17,7 @@
     <Compile Include="Areas\Jobber\Controllers\JobberHomeController.cs" />
     <Compile Include="Areas\Jobber\Controllers\JobberRentalsController.cs" />
     <Compile Include="Areas\Jobber\Controllers\JobberVehiclesController.cs" />
+    <Compile Include="Areas\Jobber\Controllers\SearchController.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -58,6 +59,7 @@
     <None Include="Areas\Jobber\Views\JobberVehicles\Details.cshtml" />
     <None Include="Areas\Jobber\Views\JobberVehicles\Edit.cshtml" />
     <None Include="Areas\Jobber\Views\JobberVehicles\Index.cshtml" />
+    <None Include="Areas\Jobber\Views\Search\ListVehiclesSearchPartial.cshtml" />
     <None Include="Areas\Jobber\Views\Shared\Error.cshtml" />
     <None Include="Areas\Jobber\Views\Shared\_JobberLayout.cshtml" />
     <None Include="Areas\Jobber\Views\Shared\_SidePartialView.cshtml" />

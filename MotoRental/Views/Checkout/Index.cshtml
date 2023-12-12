@@ -20,35 +20,40 @@
                                     <div class="checkout-form-list">
                                         <label>Họ và Tên</label>
                                         <input asp-for="FullName" placeholder="Họ và Tên" type="text">
+                                        <span asp-validation-for="FullName" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="checkout-form-list">
                                         <label>Số điện thoại <span class="required">*</span></label>
-                                        <input asp-for="Phone" placeholder="Số điện thoại" type="text">
+                                        <input asp-for="Phone" placeholder="Số điện thoại" type="tel">
+                                        <span asp-validation-for="Phone" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="checkout-form-list">
                                         <label>Địa chỉ nhận hàng <span class="required">*</span></label>
                                         <input asp-for="Address" placeholder="Địa chỉ nhận hàng" type="text">
+                                        <span asp-validation-for="Address" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="checkout-form-list">
                                         <label>Ngày bắt đầu thuê<span class="required">*</span></label>
                                         <input asp-for="DateFrom" placeholder="Ngày giờ bắt đầu thuê" type="datetime-local">
+                                        <span asp-validation-for="DateFrom" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="checkout-form-list">
                                         <label>Ngày kết thúc thuê<span class="required">*</span></label>
                                         <input asp-for="DateTo" placeholder="Ngày giờ kết thúc thuê" type="datetime-local">
+                                        <span asp-validation-for="DateTo" class="text-danger"></span>
                                     </div>
                                 </div>
                             </div>
                             <div class="order-notes">
-                                <textarea class="input" asp-for="Note" placeholder="Ghi chú"></textarea>
+                                <textarea class="input" asp-for="Note" name="Note" placeholder="Ghi chú"></textarea>
                             </div>
                         </div>
                     </div>

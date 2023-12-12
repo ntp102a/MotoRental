@@ -83,7 +83,7 @@ namespace MotoRental.Controllers
                         model.UserId = khachhang.UserId;
                         model.FullName = khachhang.FullName;
                         model.Email = khachhang.Email;
-                        model.Phone = (int)khachhang.Phone;
+                        model.Phone = khachhang.Phone;
                         model.Address = khachhang.Address;
                     }
 
@@ -211,7 +211,7 @@ namespace MotoRental.Controllers
                         {
                             FullName = khachhang.FullName,
                             DonHangID = donhang.RentalId,
-                            Phone = (int)khachhang.Phone,
+                            Phone = khachhang.Phone,
                             Address = khachhang.Address
                         };
 

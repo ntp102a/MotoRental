@@ -1,16 +1,17 @@
-﻿@model IEnumerable<MotoRental.Models.Vehicle>
+﻿@using PagedList.Core.Mvc
+@model PagedList.Core.IPagedList<MotoRental.Models.Vehicle>
 
 @{
+    int CurrentPage = ViewBag.CurrentPage;
     ViewData["Title"] = "Index";
     Layout = "~/Areas/Jobber/Views/Shared/_JobberLayout.cshtml";
 }
 
 <div class="page-header">
-
     <div class="header-sub-title">
         <nav class="breadcrumb breadcrumb-dash">
-            <a asp-area="Jobber" asp-controller="JobberVehicles" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
-            <span class="breadcrumb-item active">Danh sách xe máy</span>
+            <a asp-area="Jobber" asp-controller="JobberHome" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Trang chủ</a>
+            <span class="breadcrumb-item active">Danh sách xe máy: page @CurrentPage</span>
         </nav>
     </div>
 </div>
@@ -20,7 +21,7 @@
             <div class="col-lg-8">
                 <div class="d-md-flex">
                     <div class="m-b-10 m-r-15">
-                        <select class="custom-select" id="txtCatID" name="txtCatID" style="min-width: 200px;" asp-items="ViewBag.DanhMuc">
+                        <select class="custom-select" id="txtCatID" name="txtCatID" style="min-width: 200px;" asp-items="ViewBag.Brands">
                             <option selected>Chọn danh mục</option>
                             <option value="0">Chọn tất cả</option>
                         </select>
@@ -34,8 +35,7 @@
                 </div>
             </div>
             <div class="col-lg-4 text-right">
-                <a class="btn btn-primary" asp-controller="AdminVehicles" asp-action="Create"> <i class="anticon anticon-plus-circle m-r-5"></i> <span>Thêm xe mới</span></a>
-
+                <a class="btn btn-primary" asp-controller="JobberVehicles" asp-action="Create"> <i class="anticon anticon-plus-circle m-r-5"></i> <span>Thêm xe mới</span></a>
             </div>
         </div>
         <div class="table-responsive">
@@ -52,7 +52,7 @@
                         <th></th>
                     </tr>
                 </thead>
-                @*<tbody id="records_table">
+                <tbody id="records_table">
                     @if (Model != null)
                     {
                         foreach (var item in Model)
@@ -85,22 +85,71 @@
                                         </div>
                                     }
                                 </td>
-                                <td>@item.User.FullName</td>
                                 <td>
-                                    <a class="btn btn-primary btn-tone m-r-5" asp-area="Admin" asp-controller="AdminVehicles" asp-action="Details" asp-route-id="@item.VehicleId">View</a>
-                                    <a class="btn btn-secondary btn-tone m-r-5" asp-area="Admin" asp-controller="AdminVehicles" asp-action="Edit" asp-route-id="@item.VehicleId">Edit</a>
-                                    <a class="btn btn-success btn-tone m-r-5" asp-area="Admin" asp-controller="AdminVehicles" asp-action="Delete" asp-route-id="@item.VehicleId">Delete</a>
+                                    <a class="btn btn-primary btn-tone m-r-5" asp-area="Jobber" asp-controller="JobberVehicles" asp-action="Details" asp-route-id="@item.VehicleId">View</a>
+                                    <a class="btn btn-secondary btn-tone m-r-5" asp-area="Jobber" asp-controller="JobberVehicles" asp-action="Edit" asp-route-id="@item.VehicleId">Edit</a>
+                                    <a class="btn btn-success btn-tone m-r-5" asp-area="Jobber" asp-controller="JobberVehicles" asp-action="Delete" asp-route-id="@item.VehicleId">Delete</a>
                                 </td>
                             </tr>
                         }
                     }
-                </tbody>*@
+                </tbody>
             </table>
-            @*<div aria-label="Page navigation example">
+            <div aria-label="Page navigation example">
                 <ul class="pagination">
-                    <pager class="page-container" list="@Model" asp-area="Admin" asp-controller="AdminVehicles" asp-route-CatID="@ViewBag.CurrentBrandID" asp-action="Index" />
+                    <pager class="page-container" list="@Model" asp-area="Jobber" asp-controller="JobberVehicles" asp-route-CatID="@ViewBag.CurrentBrandID" asp-action="Index" />
                 </ul>
-            </div>*@
+            </div>
         </div>
     </div>
 </div>
+@section Scripts {
+
+    <script>
+        $(document).ready(function () {
+            jQuery("#txtCatID").change(function () {
+                var brandID = jQuery(this).children(":selected").attr("value");
+                brandID = parseFloat(brandID);
+                $('#txtCatID option')
+                    .removeAttr('selected');
+                $("#txtCatID > [value=" + brandID + "]").attr("selected", "true");
+
+                $.ajax({
+                    url: '/Jobber/JobberVehicles/Filtter',
+                    datatype: "json",
+                    type: "GET",
+                    data: {
+                        BrandID: brandID
+                    },
+                    async: true,
+                    success: function (results) {
+                        if (results.status == "success") {
+                            window.location.href = results.redirectUrl;
+                        }
+                    },
+                    error: function (xhr) {
+                        alert('error');
+                    }
+                });
+            });
+
+            $("#keyword").keyup(function () {
+                var strkeyword = $('#keyword').val();
+                $.ajax({
+                    url: '/Jobber/Search/FindVehicle/',
+                    datatype: "json",
+                    type: "POST",
+                    data: { keyword: strkeyword },
+                    async: true,
+                    success: function (results) {
+                        $("#records_table").html("");
+                        $("#records_table").html(results);
+                    },
+                    error: function (xhr) {
+                        alert('error');
+                    }
+                });
+            });
+        });
+    </script>
+}
