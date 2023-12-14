@@ -21,28 +21,57 @@ namespace MotoRental.Controllers
 
         // GET: Vehicles
         [Route("shop.html", Name = "ShopProduct")]
-        public IActionResult Index(int? page)
+        public IActionResult Index(int? page, int? sort)
         {
             try
             {
                 var pageNumber = page == null || page <= 0 ? 1 : page.Value;
-                var pageSize = 5;
-                var IsPages = _context.Vehicles
-                    .AsNoTracking().Include(v => v.Brand)
-                    .Include(v => v.Displacement)
-                    .Include(v => v.Image)
-                    .OrderByDescending(x => x.UpdationDate);
-                PagedList<Vehicle> models = new PagedList<Vehicle>(IsPages, pageNumber, pageSize);
-                ViewBag.CurrentPage = pageNumber;
+                var pageSize = 10;
+
+                IQueryable<Vehicle> lsVehicle;
+                if (sort == 0)
+                {
+                    lsVehicle = _context.Vehicles
+                    .AsNoTracking()
+                    .Include(p => p.Image)
+                    .Include(p => p.Brand)
+                    .Include(p => p.Displacement)
+                    .Include(p => p.User)
+                    .OrderByDescending(x => x.VehicleId);
+                }
+                else if (sort == 1)
+                {
+                    lsVehicle = _context.Vehicles
+                    .AsNoTracking()
+                    .Include(p => p.Image)
+                    .Include(p => p.Brand)
+                    .Include(p => p.Displacement)
+                    .Include(p => p.User)
+                    .OrderBy(x => x.PricePerDay);
+                }
+                else
+                {
+                    lsVehicle = _context.Vehicles
+                    .AsNoTracking()
+                    .Include(p => p.Image)
+                    .Include(p => p.Brand)
+                    .Include(p => p.Displacement)
+                    .Include(p => p.User)
+                    .OrderByDescending(x => x.PricePerDay);
+                }
+                var lsCategory = _context.Brands
+                    .AsNoTracking()
+                    .ToList();
+                PagedList<Vehicle> models = new PagedList<Vehicle>(lsVehicle, pageNumber, pageSize);
+                ViewBag.CurrentPages = pageNumber;
+                ViewBag.Categories = lsCategory;
                 return View(models);
             }
             catch
             {
                 return RedirectToAction("Index", "Home");
             }
-
         }
-
         public IActionResult List(int id, int page = 1)
         {
             try
