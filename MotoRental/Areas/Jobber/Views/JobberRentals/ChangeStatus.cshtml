@@ -1,0 +1,68 @@
+﻿@model MotoRental.Models.Rental
+
+<div class="modal-body">
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">Thông tin đơn hàng # @Model.RentalId</h1>
+            <div class="table-responsive">
+                <table class="product-info-table m-t-20">
+                    <tbody>
+                        <tr>
+                            <td>ID:</td>
+                            <td class="text=dark font-weight-semibold">@Model.RentalId</td>
+                        </tr>
+                        <tr>
+                            <td>Ngày bắt đầu:</td>
+                            <td>@Model.DateFrom</td>
+                        </tr>
+                        <tr>
+                            <td>Ngày kết thúc:</td>
+                            <td>@Model.DateTo</td>
+                        </tr>
+                        <tr>
+                            <td>Khách hàng:</td>
+                            <td>@Model.RentalName</td>
+                        </tr>
+                        <tr>
+                            <td>Số điện thoại:</td>
+                            <td>@Model.Phone</td>
+                        </tr>
+                        <tr>
+                            <td>Địa chỉ:</td>
+                            <td>@Model.Address</td>
+                        </tr>
+                        <tr>
+                            <td>Tổng tiền:</td>
+                            <td>@Model.Price.Value.ToString("#,##0") VND</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form asp-area="Jobber" asp-controller="JobberRentals" asp-action="ChangeStatus" method="post" enctype="multipart/form-data" asp-route-id="@Model.RentalId">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="RentalId" />
+            <input type="hidden" asp-for="UserId" />
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label>Chọn trạng thái đơn hàng</label>
+                        <select class="form-control" asp-for="StatusId" asp-items="ViewBag.TrangThai">
+                            <option value="0" disabled selected>Chọn trạng thái đơn hàng</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" value="Save" class="btn btn-success">Lưu thay đổi</button>
+        </form>
+    </div>
+</div>
+
+

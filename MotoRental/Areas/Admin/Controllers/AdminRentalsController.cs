@@ -35,7 +35,7 @@ namespace MotoRental.Areas.Admin.Controllers
                 .Include(x => x.User)
                 .Include(x => x.Status)
                 .AsNoTracking()
-                .OrderByDescending(x => x.DateFrom);
+                .OrderByDescending(x => x.RentalId);
             PagedList<Rental> models = new PagedList<Rental>(IsRentals, pageNumber, pageSize);
             ViewBag.CurrentPage = pageNumber;
             return View(models);
@@ -57,7 +57,14 @@ namespace MotoRental.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-
+            var Chitietdonhang = _context.RentalDetails
+                .AsNoTracking()
+                .Include(x => x.Vehicle)
+                .Include(x => x.Rental)
+                .Where(x => x.RentalId == rental.RentalId)
+                .OrderBy(x => x.RentalDetailId)
+                .ToList();
+            ViewBag.ChiTiet = Chitietdonhang;
             return View(rental);
         }
 
