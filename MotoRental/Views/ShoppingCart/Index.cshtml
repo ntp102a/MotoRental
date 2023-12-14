@@ -9,12 +9,17 @@
 <main class="main-content">
 
     <div class="cart-area section-space-y-axis-100">
+        <style>
+            .form1 {
+                display: flow;
+            }
+        </style>
         <div class="container">
             <div class="row">
                 <div class="col-12">
                     @if (Model != null && Model.Count() > 0)
                     {
-                        <form action="javascript:void(0)">
+                        <form class="form1" action="javascript:void(0)">
                             <div class="table-content table-responsive">
                                 <table class="table">
                                     <thead>
