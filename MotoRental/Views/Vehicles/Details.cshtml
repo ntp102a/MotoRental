@@ -21,17 +21,17 @@
                                 </div>
                                 <div class="swiper-slide">
                                     <a href="~/assets/images/product/large-size/2-2-555x645.jpg" class="single-img gallery-popup">
-                                        <img class="img-full" src="~/assets/images/product/large-size/2-2-555x645.jpg" alt="Product Image">
+                                        <img class="img-full" src="~/images/vehicles/@Model.Image.ImageLeftSide" alt="Product Image">
                                     </a>
                                 </div>
                                 <div class="swiper-slide">
                                     <a href="~/assets/images/product/large-size/2-3-555x645.jpg" class="single-img gallery-popup">
-                                        <img class="img-full" src="~/assets/images/product/large-size/2-3-555x645.jpg" alt="Product Image">
+                                        <img class="img-full" src="~/images/vehicles/@Model.Image.ImageBackSide" alt="Product Image">
                                     </a>
                                 </div>
                                 <div class="swiper-slide">
                                     <a href="~/assets/images/product/large-size/2-4-555x645.jpg" class="single-img gallery-popup">
-                                        <img class="img-full" src="~/assets/images/product/large-size/2-4-555x645.jpg" alt="Product Image">
+                                        <img class="img-full" src="~/images/vehicles/@Model.Image.ImageRightSide" alt="Product Image">
                                     </a>
                                 </div>
                             </div>
@@ -48,20 +48,7 @@
                                 <div class="price-box pb-1">
                                     <span class="new-price text-danger">@Model.PricePerDay.Value.ToString("#, ##0") VNĐ</span>
                                 </div>
-                                <div class="rating-box-wrap pb-7">
-                                    <div class="rating-box">
-                                        <ul>
-                                            <li><i class="pe-7s-star"></i></li>
-                                            <li><i class="pe-7s-star"></i></li>
-                                            <li><i class="pe-7s-star"></i></li>
-                                            <li><i class="pe-7s-star"></i></li>
-                                            <li><i class="pe-7s-star"></i></li>
-                                        </ul>
-                                    </div>
-                                    <div class="review-status ps-4">
-                                        <a href="javascript:void(0)">( 1 Customer Review )</a>
-                                    </div>
-                                </div>
+                                
                                 <p>Mô tả: @Model.Overview</p>
                                 <p>Số KM: @Model.Kilometers</p>
                                 <p>Biển số xe: @Model.LicensePlate</p>
@@ -71,11 +58,6 @@
                                 <p>Hãng xe: @Model.Brand.BrandName</p>
                                 <p>Phân khối: @Model.Displacement.DisplacementName</p>
                                 <ul class="quantity-with-btn pb-7">
-                                    <li class="quantity">
-                                        <div class="cart-plus-minus">
-                                            <input id="txtsoLuong" name="txtsoLuong" class="cart-plus-minus-box" value="1" type="text">
-                                        </div>
-                                    </li>
                                     <li class="add-to-cart">
                                         <a class="btn btn-custom-size lg-size btn-primary btn-secondary-hover rounded-0" href="cart.html">Add to cart</a>
                                         <input hidden asp-for="VehicleId" />
@@ -129,13 +111,6 @@
                         <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
                             <div class="product-description-body">
                                 <p>Mô tả: @Model.Overview</p>
-                                <p>Số KM: @Model.Kilometers</p>
-                                <p>Biển số xe: @Model.LicensePlate</p>
-                                <p>Ngày đăng ký xe: @Model.RegDate</p>
-                                <p>Chủ xe: @Model.User.FullName</p>
-                                <p>Số điện thoại chủ xe: @Model.User.Phone</p>
-                                <p>Hãng xe: @Model.Brand.BrandName</p>
-                                <p>Phân khối: @Model.Displacement</p>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
@@ -368,14 +343,12 @@
             $(function () {
                 $(".add-to-cart").click(function () {
                     var vehicleid = $('#VehicleId').val();
-                    var soluong = $('#txtsoLuong').val();
                     $.ajax({
                         url: '/api/cart/add',
                         type: "POST",
                         dataType: "JSON",
                         data: {
                             vehicleID: vehicleid,
-                            amount: soluong
                         },
                         success: function (response) {
                             if (response.result == 'Redirect') {
