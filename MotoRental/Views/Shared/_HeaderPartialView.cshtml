@@ -115,9 +115,10 @@
                                     </ul>
                                 </li>
                                 <li class=" d-block d-lg-none">
-                                    <a href="#searchBar" class="search-btn toolbar-btn pl-0">
-                                        <i class="pe-7s-search"></i>
-                                    </a>
+                                    <form class="hm-searchbox">
+                                        <input id="keyword" name="keyword" class="input-field" type="text" placeholder="Nhập tên xe">
+                                        <button class="btn btn-outline-whisper btn-primary-hover btn-search" type="submit"><i class="pe-7s-search"></i></button>
+                                    </form>
                                 </li>
                                 @if (User.Identity.IsAuthenticated)
                                 {
@@ -181,7 +182,7 @@
                             <ul class="dropdown-menu" aria-labelledby="languageButtonTwo">
                                 <li><a class="dropdown-item" href="#">Tiếng việt</a></li>
                             </ul>
-                        </li>
+                        </li>                      
                         <li class="dropdown dropup">
                             <button class="btn btn-link dropdown-toggle ht-btn usd-dropdown" type="button" id="currencyButtonTwo" data-bs-toggle="dropdown" aria-expanded="false">
                                 USD
@@ -206,6 +207,11 @@
 
                                 }
                             </ul>
+                        </li>
+                        <li class="dropdown dropup">
+                            <a href="#searchBar" class="search-btn toolbar-btn pl-0">
+                                <i class="pe-7s-search"></i>
+                            </a>
                         </li>
                     </ul>
                 </div>
