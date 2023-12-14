@@ -33,9 +33,9 @@ namespace MotoRental.Controllers
                 var khachhang = _context.Users
                     .AsNoTracking()
                     .SingleOrDefault(x => x.Phone.ToString().ToLower() == Phone.ToLower());
-                if (khachhang == null)
+                if (khachhang != null)
                 {
-                    return Json(data: "Số điện thoại : " + Phone + "Đã được đăng ký");
+                    return Json(data: "Số điện thoại : " + Phone + " đã được đăng ký");
                 }
                 return Json(data: true);
             }
@@ -54,9 +54,9 @@ namespace MotoRental.Controllers
                 var khachhang = _context.Users
                     .AsNoTracking()
                     .SingleOrDefault(x => x.Email.ToLower() == Email.ToLower());
-                if (khachhang == null)
+                if (khachhang != null)
                 {
-                    return Json(data: "Email : " + Email + "Đã được đăng ký");
+                    return Json(data: "Email : " + Email + " đã được đăng ký");
                 }
                 return Json(data: true);
             }

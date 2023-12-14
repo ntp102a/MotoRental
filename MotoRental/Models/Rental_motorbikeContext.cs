@@ -156,6 +156,8 @@ namespace MotoRental.Models
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
 
+                entity.Property(e => e.NumberDate).HasColumnType("decimal(3, 1)");
+
                 entity.HasOne(d => d.Rental)
                     .WithMany(p => p.RentalDetails)
                     .HasForeignKey(d => d.RentalId)

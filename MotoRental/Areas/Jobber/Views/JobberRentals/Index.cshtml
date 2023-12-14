@@ -1,4 +1,5 @@
-﻿@model IEnumerable<MotoRental.Models.Rental>
+﻿@using PagedList.Core.Mvc
+@model PagedList.Core.IPagedList<MotoRental.Models.Rental>
 
 @{
     ViewData["Title"] = "Index";
@@ -22,59 +23,64 @@
                     <tr>
                         <th>ID</th>
                         <th>Người thuê</th>
-                        <th>Giá</th>
                         <th>Ngày bắt đầu</th>
                         <th>Ngày kết thúc</th>
+                        <th>Giá</th>
                         <th>Ghi chú</th>
                         <th>Trạng thái</th>
                         <th>#</th>
                         <th></th>
                     </tr>
                 </thead>
-                @*<tbody>
+                <tbody>
                     @if (Model != null)
                     {
                         foreach (var item in Model)
                         {
                             <tr>
                                 <td>@item.RentalId</td>
-                                <td>@item.User.FullName</td>
-                                <td>@item.Price.Value.ToString("#,##0") VND</td>
+                                <td>@item.RentalName</td>
                                 <td>@item.DateFrom</td>
                                 <td>@item.DateTo</td>
+                                <td>@item.Price.Value.ToString("#,##0") VND</td>
                                 <td>@item.Message</td>
+                                <td>@item.Status?.StatusName</td>
                                 <td>
-                                    @if (@item.Status.Value == 1)
-                                    {
-                                        <div class="d-flex align-items-center">
-                                            <div class="badge badge-success badge-dot m-r-10"></div>
-                                            <div>Đang thuê</div>
-                                        </div>
-                                    }
-                                    @if (@item.Status.Value == 0)
-                                    {
-                                        <div class="d-flex align-items-center">
-                                            <div class="badge badge-success badge-dot m-r-10"></div>
-                                            <div>Trống</div>
-                                        </div>
-                                    }
-                                </td>
-                                <td>
-                                    <a class="btn btn-primary btn-tone m-r-5" asp-area="Admin" asp-controller="AdminRentals" asp-action="Details" asp-route-id="@item.RentalId">View</a>
-                                    <a class="btn btn-secondary btn-tone m-r-5" asp-area="Admin" asp-controller="AdminRentals" asp-action="Edit" asp-route-id="@item.RentalId">Edit</a>
-                                    <a class="btn btn-success btn-tone m-r-5" asp-area="Admin" asp-controller="AdminRentals" asp-action="Delete" asp-route-id="@item.RentalId">Delete</a>
-
+                                    <a class="btn btn-primary btn-tone m-r-5" asp-area="Jobber" asp-controller="JobberRentals" asp-action="Details" asp-route-id="@item.RentalId">View</a>
+                                    <a class="btn btn-secondary btn-tone m-r-5" asp-area="Jobber" asp-controller="JobberRentals" asp-action="Edit" asp-route-id="@item.RentalId">Edit</a>
+                                    <a class="btn btn-success btn-tone m-r-5" asp-area="Jobber" asp-controller="JobberRentals" asp-action="Delete" asp-route-id="@item.RentalId">Delete</a>
+                                    <a data-target="#modal-header" data-toggle="modal" class="btn btn-secondary btn-tone m-r-5" asp-area="Jobber" asp-controller="JobberRentals" asp-action="ChangeStatus" asp-route-id="@item.RentalId">Change Status</a>
                                 </td>
                             </tr>
                         }
                     }
-                </tbody>*@
+                </tbody>
             </table>
-           @* <div aria-label="Page navigation example">
+            <div aria-label="Page navigation example">
                 <ul class="pagination">
-                    <pager class="page-container" list="@Model" asp-area="Admin" asp-controller="AdminRentals" asp-action="Index" />
+                    <pager class="page-container" list="@Model" asp-area="Jobber" asp-controller="JobberRentals" asp-action="Index" />
                 </ul>
-            </div>*@
+            </div>
         </div>
     </div>
 </div>
+
+<div id="modal-header" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $('#modal-header').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var url = button.attr("href");
+            var modal = $(this);
+            // note that this will replace the content of modal-content ever time the modal is opened
+            modal.find('.modal-content').load(url);
+        });
+    </script>
+
+}

@@ -1,62 +1,86 @@
-﻿@model MotoRental.Models.Rental
+﻿@model MotoRental.ModelViews.RentalViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Sửa đơn hàng" + Model.RentalId;
     Layout = "~/Areas/Jobber/Views/Shared/_JobberLayout.cshtml";
 }
 
-<h1>Edit</h1>
-
-<h4>Rental</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="RentalId" />
-            <div class="form-group">
-                <label asp-for="DateFrom" class="control-label"></label>
-                <input asp-for="DateFrom" class="form-control" />
-                <span asp-validation-for="DateFrom" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateTo" class="control-label"></label>
-                <input asp-for="DateTo" class="form-control" />
-                <span asp-validation-for="DateTo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateShip" class="control-label"></label>
-                <input asp-for="DateShip" class="form-control" />
-                <span asp-validation-for="DateShip" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Message" class="control-label"></label>
-                <input asp-for="Message" class="form-control" />
-                <span asp-validation-for="Message" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <input asp-for="Status" class="form-control" />
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
-                <span asp-validation-for="UserId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+<div class="page-header">
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-area="Jobber" asp-controller="JobberHome" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Trang chủ</a>
+            <a class="breadcrumb-item" asp-area="Jobber" asp-controller="JobberRentals" asp-action="Index">Danh sách đơn hàng</a>
+            <span class="breadcrumb-item active">Sửa đơn hàng: @Model.RentalId</span>
+        </nav>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<form asp-controller="JobberRentals" asp-action="Edit" asp-route-id="@Model.RentalId" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="@Model.RentalId" />
+    <input type="hidden" asp-for="@Model.StatusId" />
+    <input type="hidden" asp-for="@Model.UserId" />
+    <div class="page-header no-gutters has-tab">
+        <div class="d-md-flex m-b-15 align-items-center justify-content-between">
+            <div class="media align-items-center m-b-15">
+            </div>
+            <div class="m-b-15">
+                <button class="btn btn-primary">
+                    <i class="anticon anticon-save"></i>
+                    <span>Save</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="tab-content m-t-15">
+        <div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-group">
+                        <label class="font-weight-semibold" for="productName">Tên người nhận</label>
+                        <input type="text" class="form-control" asp-for="@Model.RentalName">
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-semibold" for="productName">Số điện thoại</label>
+                        <input type="text" class="form-control" asp-for="@Model.Phone">
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-semibold" for="productPrice">Email</label>
+                        <input type="text" class="form-control" asp-for="@Model.Email">
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-semibold" for="productName">Địa chỉ</label>
+                        <input type="text" class="form-control" asp-for="@Model.Address">
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-semibold" for="productName">Ghi chú</label>
+                        <input type="text" class="form-control" asp-for="@Model.Message">
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label class="font-weight-semibold" for="productPrice">Ngày bắt đầu</label>
+                            <input type="datetime-local" class="form-control" asp-for="@Model.DateFrom">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="font-weight-semibold" for="productName">Ngày kết thúc</label>
+                            <input type="datetime-local" class="form-control" asp-for="@Model.DateTo">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                        <label class="font-weight-semibold" for="productName">Ngày giao xe</label>
+                        <input type="datetime-local" class="form-control" asp-for="@Model.DateShip">
+                    </div>
+                        <div class="form-group col-md-6">
+                            <label class="font-weight-semibold" for="productCategory">Trạng thái</label>
+                            <select class="custom-select" asp-for="@Model.StatusId" style="min-width: 200px;" asp-items="ViewBag.Status">
+                                <option value="" disabled selected>Đổi trạng thái</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
 

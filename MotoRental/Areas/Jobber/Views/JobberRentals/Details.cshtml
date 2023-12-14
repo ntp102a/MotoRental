@@ -1,61 +1,112 @@
-﻿@model MotoRental.Models.Rental
+﻿@using MotoRental.Models;
+@model MotoRental.Models.Rental
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Chi tiết hoá đơn #" + Model.RentalId;
     Layout = "~/Areas/Jobber/Views/Shared/_JobberLayout.cshtml";
+    List<RentalDetail> orderDetails = ViewBag.ChiTiet;
 }
-
-<h1>Details</h1>
+<div class="page-header">
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-area="Jobber" asp-controller="JobberHome" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+            <a class="breadcrumb-item" asp-area="Jobber" asp-controller="JobberRentals" asp-action="Index">Danh sách đơn hàng</a>
+            <span class="breadcrumb-item active">Chi tiết hoá đơn</span>
+        </nav>
+    </div>
+</div>
 
 <div>
-    <h4>Rental</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateFrom)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateFrom)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateTo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateTo)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateShip)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateShip)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Message)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Message)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.UserId)
-        </dd>
-    </dl>
+    <div class="card">
+        <div class="card-body">
+            <div id="invoice" class="p-h-30">
+                <div class="row m-t-20 lh-2">
+                    <div class="col-sm-6">
+                        <h3 class="p-l-10 m-t-10">Hoá đơn</h3>
+                        <address class="p-l-10 m-t-10">
+                            <strong class="text-dark" title="">Tên người nhận: <br /></strong>
+                            <span> @Model.RentalName</span><br />
+                            <strong class="text-dark" title="">Địa chỉ giao hàng: <br /></strong>
+                            <span> @Model.Address</span><br />
+                            <strong class="text-dark" title="">Số điện thoại:<br /></strong>
+                            <span> @Model.Phone</span><br />
+                            <strong class="text-dark" title="">Ghi chú:<br /></strong>
+                            <span> @Model.Message</span>
+                        </address>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="m-t-80">
+                            <div class="text-dark text-uppercase d-inline-block">
+                                <strong class="text-dark" title="">Mã hoá đơn: <br /></strong>
+                            </div>
+                            <div class="float-right">#@Model.RentalId</div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <strong class="text-dark" title="">Ngày bắt đầu: <br /></strong>
+                            <div class="float-right">@Model.DateFrom?.ToString("dd-MM-yyyy HH:mm:ss")</div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <strong class="text-dark" title="">Ngày kết thúc: <br /></strong>
+                            <div class="float-right">@Model.DateTo?.ToString("dd-MM-yyyy HH:mm:ss")</div>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <strong class="text-dark" title="">Ngày giao xe: <br /></strong>
+                            <div class="float-right">@Model.DateShip?.ToString("dd-MM-yyyy HH:mm:ss")</div>
+                        </div>
+                        <br />
+                        <div class="text-dark text-uppercase d-inline-block">
+                            <strong class="text-dark" title="">Trạng thái: <br /></strong>
+                            <div class="float-right"> @Model.Status.StatusName</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="m-t-10">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Số lượng</th>
+                                    <th>Đơn giá</th>
+                                    <th>Số ngày thuê</th>
+                                    <th>Tổng tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (orderDetails != null && orderDetails.Count() > 0)
+                                {
+                                    int i = 1;
+                                    foreach (var item in orderDetails)
+                                    {
+                                        string url = $"/Product/Details/{item.VehicleId}";
+                                        <tr>
+                                            <th>@i</th>
+                                            <td><a href="@url">@item.Vehicle.VehicleName</a></td>
+                                            <td>@item.Quantity</td>
+                                            <td>@item.Vehicle.PricePerDay.Value.ToString("#, ##0") VND</td>
+                                            <td>@item.NumberDate</td>
+                                            <td>@item.TotalPrice.Value.ToString("#, ##0") VND</td>
+                                        </tr>
+                                        i++;
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row m-t-60 lh-1-8">
+                        <div class="col-sm-12">
+                            <div class="float-right text-right">
+                                <h3><span class="font-weight-semibold text-dark">Tổng tiền :</span>@Model.Price.Value.ToString("#,##0") VND</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.RentalId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+

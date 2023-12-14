@@ -340,22 +340,42 @@ namespace MotoRental.Controllers
                         .Where(c => c.UserId == userId)
                         .ToList();
 
+                    DateTime startDate = Convert.ToDateTime(muahang.DateFrom);
+                    DateTime endDate = Convert.ToDateTime(muahang.DateTo);
+                    TimeSpan time = endDate - startDate;
+
+                    double totalDate = time.TotalDays;
+                    double totalDates = time.Days;
+
+                    double roundedValue = 0;
+                    if ( (totalDate - totalDates) >= 0.5)
+                    {
+                        roundedValue = (int)Math.Round(totalDate);
+                    }
+                    else
+                    {
+                        roundedValue = (totalDate * 10) / 10;
+                    }
+
                     if (cartItems.Any())
                     {
                         var donhang = new Rental
                         {
                             UserId = userId,
-                            //Address = khachhang?.Address,
-                            //Phone = khachhang?.Phone,
-                            //DateFrom = muahang.DateFrom,
-                            //DateTo = muahang.DateTo,
-                            //Message = muahang.Note,
+                            Email = khachhang.Email,
+                            Address = muahang.Address,
+                            Phone = muahang.Phone,
+                            DateFrom= muahang.DateFrom,
+                            DateTo= muahang.DateTo,
+                            Message = muahang.Note,
+                            RentalName = muahang.FullName,
                             StatusId = 1,
-                            Price = Convert.ToInt32(cartItems.Sum(x => x.TotalMoney))
+                            Price = Convert.ToInt32(cartItems.Sum(x => x.TotalMoney) * roundedValue)
                         };
-
+                        
                         _context.Rentals.Add(donhang);
                         _context.SaveChanges();
+
 
                         foreach (var item in cartItems)
                         {
@@ -364,7 +384,8 @@ namespace MotoRental.Controllers
                                 RentalId = donhang.RentalId,
                                 VehicleId = item.VehicleId,
                                 Quantity = item.Quantity,
-                                TotalPrice = item.Vehicle.PricePerDay
+                                NumberDate = (decimal?)roundedValue,
+                                TotalPrice = Convert.ToInt32(item?.Vehicle.PricePerDay * item.Quantity * roundedValue)
                             };
 
                             _context.RentalDetails.Add(orderDetail);

@@ -8,7 +8,7 @@
 <main class="main-content">
     <div class="checkout-area section-space-y-axis-100">
         <div class="container">
-            <form asp-controller="Checkout" asp-action="Index" method="post">
+            <form asp-controller="Checkout" asp-action="PaypalCheckout" method="post">
                 <input hidden asp-for="UserId" />
                 <div class="row">
                     <div class="col-lg-6 col-12">
@@ -133,13 +133,10 @@
                                         </div>
                                     </div>
                                     <div class="order-button-payment">
-                                        <input value="XÁC NHẬN ĐẶT HÀNG" type="submit">
+                                        <input value="Thay toán bằng PayPal" type="submit">
                                     </div>
                                 </div>
                             </div>
-                            <a asp-action="PaypalCheckout">
-                                <img src="~/images/paypal.gif" width="300" height="100" />
-                            </a>
                         </div>
                     </div>
                 </div>
