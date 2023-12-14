@@ -47,7 +47,7 @@ namespace MotoRental.Controllers
         {
             try
             {
-                var pageSize = 10;
+                var pageSize = 5;
                 var danhmuc = _context.Brands
                     .AsNoTracking()
                     .SingleOrDefault(x => x.BrandId == id);
