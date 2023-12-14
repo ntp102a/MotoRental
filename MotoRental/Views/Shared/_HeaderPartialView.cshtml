@@ -32,13 +32,13 @@
             </div>
         </div>
     </div>
-    <div class="header-middle py-5">
+    <div class="header-middle py-1">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-12">
                     <div class="header-middle-wrap">
                         <a href="/" class="header-logo">
-                            <img style="width: 133px; height: 63px;" src="~/images/logo.png" alt="Header Logo">
+                            <img style="width: 180px; height: 100px;" src="~/images/logo.png" alt="Header Logo">
                         </a>
                         <div class="header-search-area d-none d-lg-block">
                            @* <form class="header-searchbox">
@@ -48,7 +48,45 @@
                                 <input id="keyword" name="keyword" class="input-field" type="text" placeholder="Nhập hãng xe">
                                 <button class="btn btn-outline-whisper btn-primary-hover" type="submit"><i class="pe-7s-search"></i></button>
                             </form>*@
-                            <form>
+                            <style>
+                                form {
+                                    display: flex;
+                                    align-items: center;
+                                }
+
+                                .input-select,
+                                #keyword,
+                                .search-btn {
+                                    border: 1px solid #ccc; /* Đường viền */
+                                    border-radius: 4px; /* Bo góc */
+                                    margin-right: 5px; /* Khoảng cách giữa các thành phần */
+                                }
+
+                                .input-select,
+                                #keyword {
+                                    padding: 8px;
+                                    font-size: 14px;
+                                }
+
+                                #keyword {
+                                    flex: 1; /* Để nó chiếm phần còn lại của không gian */
+                                }
+
+                                .search-btn {
+                                    padding: 8px 12px;
+                                    font-size: 14px;
+                                    background-color: rgb(90, 133, 97); /* Màu xanh lá cây */
+                                    color: white;
+                                    border: none;
+                                    cursor: pointer;
+                                }
+
+                                    .search-btn:hover {
+                                        background-color: #45a049; /* Màu xanh lá cây đậm hơn khi di chuột qua */
+                                    }
+                            </style>
+
+                            <form >
                                 <select class="input-select" id="categorySelect">
                                     <!-- List categories lấy = js -->
                                 </select>
@@ -76,8 +114,8 @@
                                         
                                     </ul>
                                 </li>
-                                <li class="d-block d-lg-none">
-                                    <a href="#searchBar" class="search-btn toolbar-btn">
+                                <li class=" d-block d-lg-none">
+                                    <a href="#searchBar" class="search-btn toolbar-btn pl-0">
                                         <i class="pe-7s-search"></i>
                                     </a>
                                 </li>
@@ -86,7 +124,7 @@
                                     @await Component.InvokeAsync("NumberCart")
                                 }
                                 <li class="mobile-menu_wrap d-block d-lg-none">
-                                    <a href="#mobileMenu" class="mobile-menu_btn toolbar-btn pl-0">
+                                    <a href="#mobileMenu" class="mobile-menu_btn toolbar-btn pl-0" type="submit">
                                         <i class="pe-7s-menu"></i>
                                     </a>
                                 </li>
