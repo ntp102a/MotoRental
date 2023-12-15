@@ -49,6 +49,8 @@ namespace MotoRental.Areas.Jobber.Controllers
                     .Select(g => g.Key)
                     .Count();
 
+                var totalMoney = lsOrders.Sum(x => x.Price);
+                ViewBag.TotalMoney = totalMoney;
                 ViewBag.TotalOrders = totalOrders;
                 ViewBag.TotalOrdersUser = totalUser;
                 return View();

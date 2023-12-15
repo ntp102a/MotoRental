@@ -247,6 +247,22 @@ namespace MotoRental.Controllers
         {
             var environment = new SandboxEnvironment(_clientId, _clientSecret);
             var client = new PayPalHttpClient(environment);
+            DateTime startDate = Convert.ToDateTime(muahang.DateFrom);
+            DateTime endDate = Convert.ToDateTime(muahang.DateTo);
+            TimeSpan time = endDate - startDate;
+
+            double totalDate = time.TotalDays;
+            double totalDates = time.Days;
+
+            double roundedValue = 0;
+            if ((totalDate - totalDates) >= 0.5)
+            {
+                roundedValue = (int)Math.Round(totalDate);
+            }
+            else
+            {
+                roundedValue = (totalDate * 10) / 10;
+            }
 
             try
             {
@@ -255,7 +271,7 @@ namespace MotoRental.Controllers
                     Items = new List<Item>()
                 };
 
-                var total = Math.Round(GioHang.Sum(p => p.TotalMoney) / TyGiaUSD, 2);
+                var total = Math.Round(GioHang.Sum(p => p.TotalMoney * roundedValue) / TyGiaUSD, 2);
 
                 foreach (var item in GioHang)
                 {
@@ -266,7 +282,7 @@ namespace MotoRental.Controllers
                         Quantity = item.Quantity.ToString(),
                         Sku = "sku",
                         Tax = "0",
-                        Price = Math.Round(item.TotalMoney / TyGiaUSD, 2).ToString()
+                        Price = Math.Round(item.TotalMoney * roundedValue / TyGiaUSD, 2).ToString()
                     });
                 }
 
@@ -340,22 +356,22 @@ namespace MotoRental.Controllers
                         .Where(c => c.UserId == userId)
                         .ToList();
 
-                    DateTime startDate = Convert.ToDateTime(muahang.DateFrom);
-                    DateTime endDate = Convert.ToDateTime(muahang.DateTo);
-                    TimeSpan time = endDate - startDate;
+                    //DateTime startDate = Convert.ToDateTime(muahang.DateFrom);
+                    //DateTime endDate = Convert.ToDateTime(muahang.DateTo);
+                    //TimeSpan time = endDate - startDate;
 
-                    double totalDate = time.TotalDays;
-                    double totalDates = time.Days;
+                    //double totalDate = time.TotalDays;
+                    //double totalDates = time.Days;
 
-                    double roundedValue = 0;
-                    if ( (totalDate - totalDates) >= 0.5)
-                    {
-                        roundedValue = (int)Math.Round(totalDate);
-                    }
-                    else
-                    {
-                        roundedValue = (totalDate * 10) / 10;
-                    }
+                    //double roundedValue = 0;
+                    //if ( (totalDate - totalDates) >= 0.5)
+                    //{
+                    //    roundedValue = (int)Math.Round(totalDate);
+                    //}
+                    //else
+                    //{
+                    //    roundedValue = (totalDate * 10) / 10;
+                    //}
 
                     if (cartItems.Any())
                     {

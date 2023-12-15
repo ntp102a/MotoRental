@@ -18,15 +18,15 @@
                             <h2 class="widgets-title mb-5">Hãng</h2>
                             <div class="widgets-item">
                                 @foreach (var item in ViewBag.Categories)
-                                    {
-                                        <div class="input-checkbox">
+                                {
+                                    <div class="input-checkbox">
                                         <input type="checkbox" id="brand-@item.BrandId" class="brand-checkbox" data-brand-id="@item.BrandId">
-                                            <label for="brand-@item.BrandId">
-                                                <span></span>
-                                                @item.BrandName
-                                            </label>
-                                        </div>
-                                    }
+                                        <label for="brand-@item.BrandId">
+                                            <span></span>
+                                            @item.BrandName
+                                        </label>
+                                    </div>
+                                }
                             </div>
                         </div>
                     </div>

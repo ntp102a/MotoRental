@@ -7,6 +7,11 @@
 
 <main class="main-content">
     <div class="checkout-area section-space-y-axis-100">
+        <style>
+            .form1 {
+                display: flow;
+            }
+        </style>
         <div class="container">
             <form asp-controller="Checkout" asp-action="PaypalCheckout" method="post">
                 <input hidden asp-for="UserId" />

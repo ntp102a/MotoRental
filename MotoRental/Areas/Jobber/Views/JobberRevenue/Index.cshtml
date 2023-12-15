@@ -4,6 +4,7 @@
     ViewData["Title"] = "Quản Lý Doanh Thu";
     int TotalOrders = ViewBag.TotalOrders;
     int TotalOrdersUser = ViewBag.TotalOrdersUser;
+    int ToTalMoneys = ViewBag.TotalMoney;
 }
 
 <div class="page-header">
@@ -21,7 +22,7 @@
         <div class="container">
             <!-- Content Wrapper START -->
             <div class="main-content">
-                <div class="row">
+                @*<div class="row">
                     <div class="col-md-4">
                         <!-- Thẻ chọn năm -->
                         <div class="form-group">
@@ -53,7 +54,7 @@
                             <button id="exportButton" class="btn btn-primary btn-block">Thống Kê</button>
                         </div>
                     </div>
-                </div>
+                </div>*@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="card">
@@ -64,7 +65,7 @@
                                     </div>
                                     <div class="m-l-5">
                                         <p class="m-b-0 text-muted">Tổng doanh thu trong năm</p>
-                                        <h2 class="m-b-0" id="totalRevenueInYear">0 VNĐ</h2>
+                                        <h2 class="m-b-0" id="totalRevenueInYear">@ToTalMoneys</h2>
                                     </div>
                                 </div>
                             </div>
@@ -86,7 +87,7 @@
                         </div>
                     </div>
                     <div class="col-md-4"></div>
-                    <div class="col-md-4">
+                    @*<div class="col-md-4">
                         <div class="card">
                             <div class="card-body">
                                 <div class="media align-items-center">
@@ -100,7 +101,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>*@
                     <div class="col-md-4">
                         <div class="card">
                             <div class="card-body">
@@ -132,7 +133,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-<script>
+@*<script>
     function setupExportButton() {
         var exportButton = document.getElementById('exportButton');
         exportButton.addEventListener('click', function () {
@@ -210,15 +211,12 @@
         var selectedYear = document.getElementById('yearSelect').value;
         var selectedMonth = document.getElementById('monthSelect').value;
 
-        // Lấy ngày đầu tiên của tháng để xác định số ngày trong tháng
         var firstDayOfMonth = moment(`${selectedMonth}/01/${selectedYear}`, 'MM/DD/YYYY');
         var daysInMonth = firstDayOfMonth.daysInMonth();
 
-        // Khởi tạo mảng cho labels và values, sử dụng fill() để tạo mảng có giá trị mặc định
         var labels = Array.from({ length: daysInMonth }, (_, i) => i + 1).map(day => `Ngày ${day}`);
         var values = Array(daysInMonth).fill(0);
 
-        // Tính tổng doanh thu trong tháng và năm
         var totalRevenueInMonth = 0;
         var totalRevenueInYear = 0;
 
@@ -226,51 +224,41 @@
             totalRevenueInMonth = data.data.reduce((total, item) => total + item.total, 0);
         }
 
-        // Kiểm tra xem totalRevenueInYear có tồn tại không
         if (data && data.hasOwnProperty('totalRevenueInYear')) {
             totalRevenueInYear = data.totalRevenueInYear;
         }
 
-        // Lặp qua từng ngày và cập nhật giá trị nếu có dữ liệu
         data.data.forEach(dayData => {
-            var dayIndex = dayData.date - 1; // Ngày bắt đầu từ 1, mảng bắt đầu từ 0
+            var dayIndex = dayData.date - 1;
             values[dayIndex] = dayData.total;
         });
         return { labels, values, totalRevenueInMonth, totalRevenueInYear };
     }
 
-    //Cập nhật tổng doanh thu của tháng
     function updateTotalRevenueInMonth(totalRevenue) {
         console.log("Tổng doanh thu tháng (trước định dạng): ", totalRevenue);
 
-        // Kiểm tra xem totalRevenue có phải là một số không
         if (typeof totalRevenue === 'number' && !isNaN(totalRevenue)) {
-            // Áp dụng định dạng số tiền và cập nhật lên giao diện
             document.getElementById('totalRevenueInMonth').textContent = `${totalRevenue.toLocaleString()} VNĐ`;
         } else {
             console.error('Giá trị không hợp lệ cho tổng doanh thu tháng.');
         }
     }
-    //Cập nhật tổng doanh thu của năm
+    
     function updateTotalRevenueInYear(totalRevenue) {
         console.log("Tổng doanh thu năm: ", totalRevenue);
 
-        // Kiểm tra xem totalRevenue có phải là một số không
         if (typeof totalRevenue === 'number' && !isNaN(totalRevenue)) {
-            // Áp dụng định dạng số tiền và cập nhật lên giao diện
             document.getElementById('totalRevenueInYear').textContent = `${totalRevenue.toLocaleString()} VNĐ`;
         } else {
             console.error('Giá trị không hợp lệ cho tổng doanh thu năm.');
         }
     }
-    // Hàm để tạo danh sách tùy chọn cho ô chọn năm, tháng và ngày
     function populateDateFields() {
         var currentDate = new Date();
         var currentYear = currentDate.getFullYear();
-        var currentMonth = currentDate.getMonth() + 1; // Tháng bắt đầu từ 0
-        //var currentDay = currentDate.getDate();
+        var currentMonth = currentDate.getMonth() + 1;
 
-        // Ô chọn năm
         var yearSelect = document.getElementById('yearSelect');
         for (var year = currentYear; year >= 2000; year--) {
             var option = document.createElement('option');
@@ -278,9 +266,8 @@
             option.text = year;
             yearSelect.add(option);
         }
-        yearSelect.value = currentYear; // Đặt giá trị mặc định
+        yearSelect.value = currentYear; 
 
-        // Ô chọn tháng
         var monthSelect = document.getElementById('monthSelect');
         for (var month = 1; month <= 12; month++) {
             var option = document.createElement('option');
@@ -288,24 +275,12 @@
             option.text = month;
             monthSelect.add(option);
         }
-        monthSelect.value = currentMonth; // Đặt giá trị mặc định
-
-        // Ô chọn ngày
-        // var daySelect = document.getElementById('daySelect');
-        // for (var day = 1; day <= 31; day++) {
-        //     var option = document.createElement('option');
-        //     option.value = day;
-        //     option.text = day;
-        //     daySelect.add(option);
-        // }
-        // daySelect.value = currentDay; // Đặt giá trị mặc định
+        monthSelect.value = currentMonth;
     }
 
-
-    // Gọi hàm để tạo danh sách tùy chọn khi trang được tải
     document.addEventListener("DOMContentLoaded", function () {
         populateDateFields();
         setupExportButton();
     });
 
-</script>
+</script>*@
